@@ -62,17 +62,16 @@ def get_pull_requests_date_delta(pull_requests):
     repo_delta.sort()
 
     for r_delta in repo_delta:
-        
         if r_delta < 30:
             count_delta.append(r_delta)
 
     pull_request_number = len(count_delta)
     return pull_request_number
-    
 
 
 def count_repo_result(repo_files, repo_contributors,
-                      pull_requests, repo_readme_json, repo_json, pull_request_number):
+                      pull_requests, repo_readme_json,
+                      repo_json, pull_request_number):
 
     repo_result = 0
 
@@ -108,11 +107,6 @@ def count_repo_result(repo_files, repo_contributors,
 
     return repo_result
 
-
-def print_repo_result(repo_result):
-    print("Оценка репо: " + str(repo_result))
-
-    
 
 date_offset = 10
 
@@ -154,7 +148,7 @@ if __name__ == '__main__':
     )
 
 repo_contributors = get_repo_contributors(repo_contributors_json)
-pull_requests = get_repo_pull_requests(repo_pull_requests_json,date_offset)
+pull_requests = get_repo_pull_requests(repo_pull_requests_json, date_offset)
 pull_request_number = get_pull_requests_date_delta(pull_requests)
 repo_files = get_repo_file(repo_files_json)
 repo_result = count_repo_result(
@@ -165,4 +159,3 @@ repo_result = count_repo_result(
     repo_json,
     pull_request_number
 )
-print_repo_result(repo_result)
