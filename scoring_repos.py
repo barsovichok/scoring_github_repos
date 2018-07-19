@@ -2,6 +2,13 @@ import requests
 from datetime import datetime
 
 
+def check_user_input(user):
+    url = f'https://api.github.com/repos/{user}'
+    result = requests.get(url, params=repo_params).json()
+    if 'Not Found' in result.values():
+            print('Данные неверны, перезапустите скрипт')
+
+
 def get_repo_json(repo_params, user):
     url = f'https://api.github.com/repos/{user}'
     result = requests.get(url, params=repo_params).json()
@@ -62,7 +69,6 @@ def get_pull_requests_date_delta(pull_requests, date_delta):
 
     repo_delta.sort()
 
-
     for r_delta in repo_delta:
         if r_delta < date_delta:
             count_delta.append(r_delta)
@@ -114,7 +120,6 @@ def print_repo_result(repo_result):
     print("Оценка репо: " + str(repo_result))
 
 
-
 if __name__ == '__main__':
 
     date_offset = 10
@@ -123,15 +128,16 @@ if __name__ == '__main__':
     repo_params = {
         'client_id': 'bb075a31f15f7f7354df',
         'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e',
-}
+    }
 
     repo_pull_params = {
         'client_id': 'bb075a31f15f7f7354df',
         'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e',
         'state': 'all',
-}
+    }
 
     user = input('Укажите репозиторий в формате owner/repo\n')
+    check_user_input(user)
 
     repo_contributors_json = get_repo_resource_json(
         user=user,
@@ -162,16 +168,26 @@ if __name__ == '__main__':
         repo_params=repo_params,
     )
 
-repo_contributors = get_repo_contributors(repo_contributors_json)
-pull_requests = get_repo_pull_requests(repo_pull_requests_json, date_offset)
-pull_request_amount = get_pull_requests_date_delta(pull_requests, date_delta)
-repo_files = get_repo_file(repo_files_json)
-repo_result = count_repo_result(
-    repo_files,
-    repo_contributors,
-    pull_requests,
-    repo_readme_json,
-    repo_json,
-    pull_request_amount
-)
-print_repo_result(repo_result)
+    repo_contributors = get_repo_contributors(repo_contributors_json)
+    pull_requests = get_repo_pull_requests(
+        repo_pull_requests_json,
+        date_offset
+    )
+
+    pull_request_amount = get_pull_requests_date_delta(
+        pull_requests,
+        date_delta
+    )
+
+    repo_files = get_repo_file(repo_files_json)
+
+    repo_result = count_repo_result(
+        repo_files,
+        repo_contributors,
+        pull_requests,
+        repo_readme_json,
+        repo_json,
+        pull_request_amount
+    )
+
+    print_repo_result(repo_result)
