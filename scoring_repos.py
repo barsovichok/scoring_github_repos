@@ -43,7 +43,8 @@ def get_repo_file(repo_files_json):
     return repo_files
 
 
-def get_pull_requests_date_delta(pull_requests):
+def get_pull_requests_date_delta(pull_requests, date_delta):
+
     date_request = []
     repo_delta = []
     count_delta = []
@@ -61,21 +62,22 @@ def get_pull_requests_date_delta(pull_requests):
 
     repo_delta.sort()
 
+
     for r_delta in repo_delta:
-        if r_delta < 30:
+        if r_delta < date_delta:
             count_delta.append(r_delta)
 
-    pull_request_number = len(count_delta)
-    return pull_request_number
+    pull_request_amount = len(count_delta)
+    return pull_request_amount
 
 
 def count_repo_result(repo_files, repo_contributors,
                       pull_requests, repo_readme_json,
-                      repo_json, pull_request_number):
+                      repo_json, pull_request_amount):
 
     repo_result = 0
 
-    if pull_request_number != 0:
+    if pull_request_amount != 0:
         repo_result += 1
 
     if '.editorconfig' in repo_files:
@@ -112,14 +114,23 @@ def print_repo_result(repo_result):
     print("Оценка репо: " + str(repo_result))
 
 
-date_offset = 10
-
-repo_params = {
-    'client_id': 'bb075a31f15f7f7354df',
-    'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e',
-}
 
 if __name__ == '__main__':
+
+    date_offset = 10
+    date_delta = 30
+
+    repo_params = {
+        'client_id': 'bb075a31f15f7f7354df',
+        'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e',
+}
+
+    repo_pull_params = {
+        'client_id': 'bb075a31f15f7f7354df',
+        'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e',
+        'state': 'all',
+}
+
     user = input('Укажите репозиторий в формате owner/repo\n')
 
     repo_contributors_json = get_repo_resource_json(
@@ -137,7 +148,7 @@ if __name__ == '__main__':
     repo_pull_requests_json = get_repo_resource_json(
         user=user,
         repo_resource='/pulls',
-        repo_params=repo_params.update({'state': 'all'}),
+        repo_params=repo_pull_params,
     )
 
     repo_files_json = get_repo_resource_json(
@@ -153,7 +164,7 @@ if __name__ == '__main__':
 
 repo_contributors = get_repo_contributors(repo_contributors_json)
 pull_requests = get_repo_pull_requests(repo_pull_requests_json, date_offset)
-pull_request_number = get_pull_requests_date_delta(pull_requests)
+pull_request_amount = get_pull_requests_date_delta(pull_requests, date_delta)
 repo_files = get_repo_file(repo_files_json)
 repo_result = count_repo_result(
     repo_files,
@@ -161,6 +172,6 @@ repo_result = count_repo_result(
     pull_requests,
     repo_readme_json,
     repo_json,
-    pull_request_number
+    pull_request_amount
 )
 print_repo_result(repo_result)
