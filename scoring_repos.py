@@ -121,12 +121,6 @@ repo_params = {
     'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e',
 }
 
-repo_pull_params = {
-    'client_id': 'bb075a31f15f7f7354df',
-    'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e',
-    'state': 'all',
-}
-
 if __name__ == '__main__':
     user = input('Укажите репозиторий в формате owner/repo\n')
 
@@ -145,7 +139,7 @@ if __name__ == '__main__':
     repo_pull_requests_json = get_repo_resource_json(
         user=user,
         repo_resource='/pulls',
-        repo_params=repo_pull_params,
+        repo_params=repo_params.update({'state': 'all'}),
     )
 
     repo_files_json = get_repo_resource_json(
