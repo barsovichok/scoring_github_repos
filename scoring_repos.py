@@ -14,17 +14,17 @@ def get_repo_resource_json(repo_resource, repo_params, user):
     return result
 
 
-def get_repo_contributors(make_repo_contributor_url):
-    repo_contributors = len(make_repo_contributor_url)
+def get_repo_contributors(repo_contributors_json):
+    repo_contributors = len(repo_contributors_json)
     return repo_contributors
 
 
-def get_repo_pull_requests(make_repo_pulls_url):
+def get_repo_pull_requests(repo_pull_requests_json, date_offset):
     pull_requests = []
 
-    for request in make_repo_pulls_url:
+    for request in repo_pull_requests_json:
         list_repo = str(request['merged_at'])
-        list_repo = list_repo[:10]
+        list_repo = list_repo[:date_offset]
         pull_requests.append(list_repo)
 
     for pr in pull_requests:
@@ -34,9 +34,9 @@ def get_repo_pull_requests(make_repo_pulls_url):
     return pull_requests
 
 
-def get_repo_file(make_repo_files_url):
+def get_repo_file(repo_files_json):
     repo_files = []
-    for file_name in make_repo_files_url:
+    for file_name in repo_files_json:
         list_repo_file = file_name['name']
         repo_files.append(list_repo_file)
 
@@ -46,6 +46,7 @@ def get_repo_file(make_repo_files_url):
 def get_pull_requests_date_delta(pull_requests):
     date_request = []
     repo_delta = []
+    count_delta = []
 
     for pull_request in pull_requests:
         pull_request = datetime.strptime(pull_request, '%Y-%m-%d')
@@ -60,17 +61,23 @@ def get_pull_requests_date_delta(pull_requests):
 
     repo_delta.sort()
 
-    return repo_delta
+    for r_delta in repo_delta:
+        
+        if r_delta < 30:
+            count_delta.append(r_delta)
+
+    pull_request_number = len(count_delta)
+    return pull_request_number
+    
 
 
 def count_repo_result(repo_files, repo_contributors,
-                      pull_requests, repo_delta, repo_readme_json, repo_json):
+                      pull_requests, repo_readme_json, repo_json, pull_request_number):
 
     repo_result = 0
 
-    if repo_delta != []:
-        if repo_delta[0] < 30:
-            repo_result += 1
+    if pull_request_number != 0:
+        repo_result += 1
 
     if '.editorconfig' in repo_files:
         repo_result += 1
@@ -105,6 +112,9 @@ def count_repo_result(repo_files, repo_contributors,
 def print_repo_result(repo_result):
     print("Оценка репо: " + str(repo_result))
 
+    
+
+date_offset = 10
 
 repo_params = {
     'client_id': 'bb075a31f15f7f7354df',
@@ -150,15 +160,15 @@ if __name__ == '__main__':
     )
 
 repo_contributors = get_repo_contributors(repo_contributors_json)
-pull_requests = get_repo_pull_requests(repo_pull_requests_json)
-repo_delta = get_pull_requests_date_delta(pull_requests)
+pull_requests = get_repo_pull_requests(repo_pull_requests_json,date_offset)
+pull_request_number = get_pull_requests_date_delta(pull_requests)
 repo_files = get_repo_file(repo_files_json)
 repo_result = count_repo_result(
     repo_files,
     repo_contributors,
     pull_requests,
-    repo_delta,
     repo_readme_json,
-    repo_json
+    repo_json,
+    pull_request_number
 )
 print_repo_result(repo_result)
