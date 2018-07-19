@@ -2,13 +2,13 @@ import requests
 from datetime import datetime
 
 
-def make_repo_url(repo_params, user):
+def get_repo_json(repo_params, user):
     url = f'https://api.github.com/repos/{user}'
     result = requests.get(url, params=repo_params).json()
     return result
 
 
-def make_repo_resource_url(repo_resource, repo_params, user):
+def get_repo_resource_json(repo_resource, repo_params, user):
     url = f'https://api.github.com/repos/{user}{repo_resource}'
     result = requests.get(url, params=repo_params).json()
     return result
@@ -64,7 +64,7 @@ def get_pull_requests_date_delta(pull_requests):
 
 
 def count_repo_result(repo_files, repo_contributors,
-                      pull_requests, repo_delta, make_repo_readme_url, repo):
+                      pull_requests, repo_delta, repo_readme_json, repo_json):
 
     repo_result = 0
 
@@ -81,83 +81,84 @@ def count_repo_result(repo_files, repo_contributors,
     if repo_contributors > 10:
         repo_result += 2
 
-    elif repo_contributors > 2 and repo_contributors < 10:
+    elif 2 < repo_contributors < 10:
         repo_result += 1
 
-    if 'name' in make_repo_readme_url.keys():
+    if 'name' in repo_readme_json.keys():
         repo_result += 1
 
-    if repo['license'] is not None:
+    if repo_json['license'] is not None:
         repo_result += 1
 
-    if repo['forks'] != 0:
+    if repo_json['forks'] != 0:
         repo_result += 1
 
-    if repo['stargazers_count'] > 50:
+    if repo_json['stargazers_count'] > 50:
         repo_result += 2
 
-    elif repo['stargazers_count'] > 1 and repo['stargazers_count'] < 50:
+    elif 1 < repo_json['stargazers_count'] < 50:
         repo_result += 1
 
+    return repo_result
+
+
+def print_repo_result(repo_result):
     print("Оценка репо: " + str(repo_result))
 
 
+repo_params = {
+    'client_id': 'bb075a31f15f7f7354df',
+    'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e',
+}
+
+repo_pull_params = {
+    'client_id': 'bb075a31f15f7f7354df',
+    'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e',
+    'state': 'all',
+}
+
 if __name__ == '__main__':
     user = input('Укажите репозиторий в формате owner/repo\n')
-    
-    make_repo_contributor_url = make_repo_resource_url(
-    user=user,
-    repo_resource='/contributors',
-    repo_params={
-        'client_id': 'bb075a31f15f7f7354df',
-        'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e'
-        }
+
+    repo_contributors_json = get_repo_resource_json(
+        user=user,
+        repo_resource='/contributors',
+        repo_params=repo_params,
     )
 
-make_repo_readme_url = make_repo_resource_url(
-    user=user,
-    repo_resource='/readme',
-    repo_params={
-        'client_id': 'bb075a31f15f7f7354df',
-        'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e'
-        }
+    repo_readme_json = get_repo_resource_json(
+        user=user,
+        repo_resource='/readme',
+        repo_params=repo_params,
     )
 
-make_repo_pulls_url = make_repo_resource_url(
-    user=user,
-    repo_resource='/pulls',
-    repo_params={
-        'client_id': 'bb075a31f15f7f7354df',
-        'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e',
-        'state': 'all'
-        }
+    repo_pull_requests_json = get_repo_resource_json(
+        user=user,
+        repo_resource='/pulls',
+        repo_params=repo_pull_params,
     )
 
-make_repo_files_url = make_repo_resource_url(
-    user=user,
-    repo_resource='/contents',
-    repo_params={
-        'client_id': 'bb075a31f15f7f7354df',
-        'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e'
-        }
+    repo_files_json = get_repo_resource_json(
+        user=user,
+        repo_resource='/contents',
+        repo_params=repo_params,
     )
 
-repo = make_repo_url(
-    user=user,
-    repo_params={
-        'client_id': 'bb075a31f15f7f7354df',
-        'client_secret': 'bba1541f020e844333036e1959312ac5b1a9380e'
-        })
+    repo_json = get_repo_json(
+        user=user,
+        repo_params=repo_params,
+    )
 
-repo_contributors = get_repo_contributors(make_repo_contributor_url)
-pull_requests = get_repo_pull_requests(make_repo_pulls_url)
+repo_contributors = get_repo_contributors(repo_contributors_json)
+pull_requests = get_repo_pull_requests(repo_pull_requests_json)
 repo_delta = get_pull_requests_date_delta(pull_requests)
-repo_files = get_repo_file(make_repo_files_url)
-count_repo_result = count_repo_result(
+repo_files = get_repo_file(repo_files_json)
+repo_result = count_repo_result(
     repo_files,
     repo_contributors,
     pull_requests,
     repo_delta,
-    make_repo_readme_url,
-    repo)
-
+    repo_readme_json,
+    repo_json
+)
+print_repo_result(repo_result)
