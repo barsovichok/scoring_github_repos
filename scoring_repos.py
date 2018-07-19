@@ -108,6 +108,10 @@ def count_repo_result(repo_files, repo_contributors,
     return repo_result
 
 
+def print_repo_result(repo_result):
+    print("Оценка репо: " + str(repo_result))
+
+
 date_offset = 10
 
 repo_params = {
@@ -159,3 +163,4 @@ repo_result = count_repo_result(
     repo_json,
     pull_request_number
 )
+print_repo_result(repo_result)
