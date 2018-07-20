@@ -126,9 +126,16 @@ if __name__ == '__main__':
     date_offset = 10
     date_delta = 30
 
-    repo_params = {'client_id': os.environ.get('client_id'), 'client_secret':  os.environ.get('client_secret')}
-    
-    repo_pull_params = {'client_id': os.environ.get('client_id'), 'client_secret':  os.environ.get('client_secret'), 'state': 'all'}
+    repo_params = {
+        'client_id': os.environ.get('client_id'),
+        'client_secret':  os.environ.get('client_secret'),
+    }
+
+    repo_pull_params = {
+        'client_id': os.environ.get('client_id'),
+        'client_secret':  os.environ.get('client_secret'),
+        'state': 'all',
+    }
 
     user = input('Укажите репозиторий в формате owner/repo\n')
     check_user_input(user)

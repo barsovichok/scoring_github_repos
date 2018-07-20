@@ -14,6 +14,10 @@
 
 * Версия Python - от 3.6.x
 
+<h4>Важно:</h4>
+
+>Cкрипт использует client_id и secret_key, которые необходимы для отправки запросов к api Github. Чтобы получить эти переменные, вам нужно создать OAuth App на Github'e. Как это сделать, изложено [здесь](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/). После создания приложения вам нужно будет перейти в свой профиль -> settings -> developer settings -> Oauth Apps и выбрать созданное приложение. В приложении будут указаны client_id и secret_key. Сохраните их где-нибудь, они нам скоро пригодятся.
+
 
 <h3>Что делает cкрипт:</h3>
 
@@ -36,10 +40,19 @@
 
 1. Скачайте репозиторий к себе локально
 2. В командной строке перейдите в директорию, где сохранён репозиторий
-3. Запустите файл scoring_repos.py
+3. Запустите файл scoring_repos.py с использованием переменных
 
 ```
-$ python scoring_repos.py
+Linux, Mac OS:
+
+Здесь переменные можно передать прямо при запуске приложения:
+$ client_id = your_client_id, secret_key = your_secret_key  python script.py
+
+Windows:
+
+В Windows мы сначала устанавливаем переменные среды командой SET, затем запускаем скрипт
+> SET client_id = your_client_id
+> secret_key = your_secret_key 
 > python scoring_repos.py 
 ```
 
