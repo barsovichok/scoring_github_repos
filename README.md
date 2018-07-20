@@ -42,16 +42,18 @@
 2. В командной строке перейдите в директорию, где сохранён репозиторий
 3. Запустите файл scoring_repos.py с использованием переменных
 
-</h5>Linux, Mac OS:</h5>
+</h4>Linux, Mac OS:</h4>
 
 <p>Здесь переменные можно передать прямо при запуске приложения</p>
+
 ```
 $ client_id = your_client_id, secret_key = your_secret_key  python script.py
 ```
 
-<h5>Windows:</h5>
+<h4>Windows:</h4>
 
 <p>В Windows мы сначала устанавливаем переменные среды командой SET, затем запускаем скрипт</p>
+
 ```
 > SET client_id = your_client_id
 > secret_key = your_secret_key 
