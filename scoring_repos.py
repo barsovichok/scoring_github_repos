@@ -2,6 +2,9 @@ import requests
 from datetime import datetime
 import os
 
+def user():
+    user = input('Укажите репозиторий в формате owner/repo\n')
+    return user
 
 def check_user_input(user):
     url = f'https://api.github.com/repos/{user}'
@@ -122,7 +125,7 @@ def count_repo_result(repo_files, repo_contributors,
 
 
 def print_repo_result(repo_result):
-    print("Оценка репо: " + str(repo_result))
+    return repo_result
 
 
 if __name__ == '__main__':
@@ -141,7 +144,7 @@ if __name__ == '__main__':
         'state': 'all',
     }
 
-    user = input('Укажите репозиторий в формате owner/repo\n')
+    user = user()
 
     check_user_input = check_user_input(user)
 
