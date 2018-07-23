@@ -6,8 +6,12 @@ import os
 def check_user_input(user):
     url = f'https://api.github.com/repos/{user}'
     result = requests.get(url, params=repo_params).json()
-    if 'Not Found' in result.values():
-            print('Данные неверны, перезапустите скрипт')
+    if result.get('message') == 'Not Found':
+        return None
+    else:
+        return result
+
+
 
 
 def get_repo_json(repo_params, user):
@@ -138,57 +142,63 @@ if __name__ == '__main__':
     }
 
     user = input('Укажите репозиторий в формате owner/repo\n')
-    check_user_input(user)
 
-    repo_contributors_json = get_repo_resource_json(
-        user=user,
-        repo_resource='/contributors',
-        repo_params=repo_params,
-    )
+    check_user_input = check_user_input(user)
 
-    repo_readme_json = get_repo_resource_json(
-        user=user,
-        repo_resource='/readme',
-        repo_params=repo_params,
-    )
+    if check_user_input is None:
+        print('Повторите ввод')
+    else:
+            repo_contributors_json = get_repo_resource_json(
+                user=user,
+                repo_resource='/contributors',
+                repo_params=repo_params,
+            )
 
-    repo_pull_requests_json = get_repo_resource_json(
-        user=user,
-        repo_resource='/pulls',
-        repo_params=repo_pull_params,
-    )
 
-    repo_files_json = get_repo_resource_json(
-        user=user,
-        repo_resource='/contents',
-        repo_params=repo_params,
-    )
+            repo_readme_json = get_repo_resource_json(
+                user=user,
+                repo_resource='/readme',
+                repo_params=repo_params,
+            )
 
-    repo_json = get_repo_json(
-        user=user,
-        repo_params=repo_params,
-    )
+            repo_pull_requests_json = get_repo_resource_json(
+                user=user,
+                repo_resource='/pulls',
+                repo_params=repo_pull_params,
+            )
 
-    repo_contributors = get_repo_contributors(repo_contributors_json)
-    pull_requests = get_repo_pull_requests(
-        repo_pull_requests_json,
-        date_offset
-    )
+            repo_files_json = get_repo_resource_json(
+                user=user,
+                repo_resource='/contents',
+                repo_params=repo_params,
+            )
 
-    pull_request_amount = get_pull_requests_date_delta(
-        pull_requests,
-        date_delta
-    )
+            repo_json = get_repo_json(
+                user=user,
+                repo_params=repo_params,
+            )
 
-    repo_files = get_repo_file(repo_files_json)
+            repo_contributors = get_repo_contributors(repo_contributors_json)
 
-    repo_result = count_repo_result(
-        repo_files,
-        repo_contributors,
-        pull_requests,
-        repo_readme_json,
-        repo_json,
-        pull_request_amount
-    )
+            pull_requests = get_repo_pull_requests(
+                repo_pull_requests_json,
+                date_offset
+            )
 
-    print_repo_result(repo_result)
+            pull_request_amount = get_pull_requests_date_delta(
+                pull_requests,
+                date_delta
+            )
+
+            repo_files = get_repo_file(repo_files_json)
+
+            repo_result = count_repo_result(
+                repo_files,
+                repo_contributors,
+                pull_requests,
+                repo_readme_json,
+                repo_json,
+                pull_request_amount
+            )
+
+            print_repo_result(repo_result)
