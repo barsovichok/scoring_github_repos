@@ -7,13 +7,20 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     return "Flask App!"
- 
-@app.route("/evaluate_repo/<string:owner>/<string:namerepo>")
-def hello(owner, namerepo):
 
+
+@app.route("/evaluate_repo")
+
+
+
+def evaluate_repo():
+    owner = request.args.get('owner', type = str)
+    namerepo = request.args.get('namerepo', type = str)
+
+#
     date_offset = 10
     date_delta = 30
-
+     
     user = str(owner+'/'+namerepo)
     get_get = scoring_repos.check_user_input(user)
     repo_params = scoring_repos.return_repo_params()
@@ -71,12 +78,17 @@ def hello(owner, namerepo):
                  repo_json,
                  pull_request_amount
              )
-    
+
+    dict_repo_result = {'rate': repo_result}
+
 
  
     return render_template(
         'test.html',**locals())
  
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=80, debug = True)
+
+    
+
 
