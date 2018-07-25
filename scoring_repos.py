@@ -2,9 +2,28 @@ import requests
 from datetime import datetime
 import os
 
+repo_params = {
+        'client_id': os.environ.get('client_id'),
+        'client_secret':  os.environ.get('client_secret'),
+    }
+
+
+repo_pull_params = {
+        'client_id': os.environ.get('client_id'),
+        'client_secret':  os.environ.get('client_secret'),
+        'state': 'all',
+    }
+
+
 def user():
     user = input('Укажите репозиторий в формате owner/repo\n')
     return user
+
+def return_repo_params():
+    return repo_params
+
+def return_repo_pull_params():
+    return repo_pull_params
 
 def check_user_input(user):
     url = f'https://api.github.com/repos/{user}'
@@ -125,7 +144,7 @@ def count_repo_result(repo_files, repo_contributors,
 
 
 def print_repo_result(repo_result):
-    return repo_result
+    print(repo_result)
 
 
 if __name__ == '__main__':
@@ -133,16 +152,7 @@ if __name__ == '__main__':
     date_offset = 10
     date_delta = 30
 
-    repo_params = {
-        'client_id': os.environ.get('client_id'),
-        'client_secret':  os.environ.get('client_secret'),
-    }
-
-    repo_pull_params = {
-        'client_id': os.environ.get('client_id'),
-        'client_secret':  os.environ.get('client_secret'),
-        'state': 'all',
-    }
+    
 
     user = user()
 
@@ -156,6 +166,7 @@ if __name__ == '__main__':
                 repo_resource='/contributors',
                 repo_params=repo_params,
             )
+
 
 
             repo_readme_json = get_repo_resource_json(
@@ -183,6 +194,7 @@ if __name__ == '__main__':
 
             repo_contributors = get_repo_contributors(repo_contributors_json)
 
+
             pull_requests = get_repo_pull_requests(
                 repo_pull_requests_json,
                 date_offset
@@ -203,5 +215,6 @@ if __name__ == '__main__':
                 repo_json,
                 pull_request_amount
             )
+
 
             print_repo_result(repo_result)
