@@ -13,7 +13,6 @@ def evaluate_repo():
     date_delta = 30
     user = owner+'/'+namerepo
     check_input = scoring_repos.check_user_input(user)
-    print(check_input)
     if check_input == None:
         return jsonify(
             error='Invalid values, please try again')
