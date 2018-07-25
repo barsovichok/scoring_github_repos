@@ -144,7 +144,7 @@ def count_repo_result(repo_files, repo_contributors,
 
 
 def print_repo_result(repo_result):
-    print(repo_result)
+    print('Оценка репо: ' + str(repo_result))
 
 
 if __name__ == '__main__':
