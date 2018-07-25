@@ -1,12 +1,7 @@
 import scoring_repos
-from flask import Flask, flash, redirect, render_template, request, session, abort, jsonify
+from flask import Flask, flash, redirect, request, session, abort, jsonify
 
 app = Flask(__name__)
-
-
-@app.route("/")
-def index():
-    return "Flask App!"
 
 
 @app.route("/evaluate_repo")
@@ -16,64 +11,71 @@ def evaluate_repo():
     namerepo = request.args.get('namerepo', type=str)
     date_offset = 10
     date_delta = 30
-    user = str(owner+'/'+namerepo)
-    get_get = scoring_repos.check_user_input(user)
-    repo_params = scoring_repos.return_repo_params()
-    repo_pull_params = scoring_repos.return_repo_pull_params()
-    repo_contributors_json = scoring_repos.get_repo_resource_json(
-                 user=user,
-                 repo_resource='/contributors',
-                 repo_params=repo_params,
-             )
-    repo_readme_json = scoring_repos.get_repo_resource_json(
-                 user=user,
-                 repo_resource='/readme',
-                 repo_params=repo_params,
-             )
-    repo_pull_requests_json = scoring_repos.get_repo_resource_json(
-                 user=user,
-                 repo_resource='/pulls',
-                 repo_params=repo_pull_params,
-             )
-    repo_files_json = scoring_repos.get_repo_resource_json(
-                 user=user,
-                 repo_resource='/contents',
-                 repo_params=repo_params,
-             )
+    user = owner+'/'+namerepo
+    check_input = scoring_repos.check_user_input(user)
+    if check_input is None:
+        return jsonify(
+            error='Invalid values, please try again')
+    else:
+        repo_params = scoring_repos.return_repo_params()
+        repo_pull_params = scoring_repos.return_repo_pull_params()
+        repo_contributors_json = scoring_repos.get_repo_resource_json(
+            user=user,
+            repo_resource='/contributors',
+            repo_params=repo_params,
+        )
 
-    repo_json = scoring_repos.get_repo_json(
-                 user=user,
-                 repo_params=repo_params,
-             )
+        repo_readme_json = scoring_repos.get_repo_resource_json(
+            user=user,
+            repo_resource='/readme',
+            repo_params=repo_params,
+        )
 
-    repo_contributors = scoring_repos.get_repo_contributors(
-        repo_contributors_json
-    )
+        repo_pull_requests_json = scoring_repos.get_repo_resource_json(
+            user=user,
+            repo_resource='/pulls',
+            repo_params=repo_pull_params,
+        )
 
-    pull_requests = scoring_repos.get_repo_pull_requests(
-                 repo_pull_requests_json,
-                 date_offset
-             )
+        repo_files_json = scoring_repos.get_repo_resource_json(
+            user=user,
+            repo_resource='/contents',
+            repo_params=repo_params,
+        )
 
-    pull_request_amount = scoring_repos.get_pull_requests_date_delta(
-                 pull_requests,
-                 date_delta
-             )
+        repo_json = scoring_repos.get_repo_json(
+            user=user,
+            repo_params=repo_params,
+        )
 
-    repo_files = scoring_repos.get_repo_file(repo_files_json)
-    repo_result = scoring_repos.count_repo_result(
-                repo_files,
-                repo_contributors,
-                pull_requests,
-                repo_readme_json,
-                repo_json,
-                pull_request_amount
-             )
+        repo_contributors = scoring_repos.get_repo_contributors(
+            repo_contributors_json
+        )
 
-    rate = 'rate'
+        pull_requests = scoring_repos.get_repo_pull_requests(
+            repo_pull_requests_json,
+            date_offset,
+        )
 
-    return jsonify(
-        rate=repo_result
+        pull_request_amount = scoring_repos.get_pull_requests_date_delta(
+            pull_requests,
+            date_delta
+        )
+
+        repo_files = scoring_repos.get_repo_file(repo_files_json)
+        repo_result = scoring_repos.count_repo_result(
+            repo_files,
+            repo_contributors,
+            pull_requests,
+            repo_readme_json,
+            repo_json,
+            pull_request_amount
+        )
+
+        rate = 'rate'
+
+        return jsonify(
+            rate=repo_result,
         )
 
 
