@@ -21,11 +21,14 @@ def get_repository():
     repository = input('Укажите репозиторий в формате owner/repo\n')
     return repository
 
+
 def return_repo_params():
     return REPO_PARAMS
 
+
 def return_repo_pull_params():
     return REPO_PULL_PARAMS
+
 
 def check_user_input(repository):
     url = f'https://api.github.com/repos/{repository}'
@@ -34,8 +37,6 @@ def check_user_input(repository):
         return None
     else:
         return result
-
-
 
 
 def get_repo_json(repo_params, repository):
@@ -86,10 +87,12 @@ def get_pull_requests_date_delta(pull_requests, date_delta):
         if pull_request == 'None':
             pull_requests.remove(pull_request)
         else:
-            pull_request = datetime.strptime(pull_request, '%Y-%m-%dT%H:%M:%SZ')
+            pull_request = datetime.strptime(
+                pull_request,
+                '%Y-%m-%dT%H:%M:%SZ'
+            )
             pull_request = datetime.date(pull_request)
             date_request.append(pull_request)
-
 
     now = datetime.today()
     now = datetime.date(now)
@@ -124,29 +127,23 @@ def count_repo_result(repo_files, repo_contributors,
     if '.travis.yml' in repo_files:
         repo_result += 1
 
-
     if repo_contributors > 10:
         repo_result += 2
-    
+
     elif 2 < repo_contributors < 10:
         repo_result += 1
-
 
     if 'name' in repo_readme_json.keys():
         repo_result += 1
 
-
     if repo_json['license'] is not None:
         repo_result += 1
-
 
     if repo_json['forks'] != 0:
         repo_result += 1
 
-
     if repo_json['stargazers_count'] > 50:
         repo_result += 2
-    
 
     elif 1 < repo_json['stargazers_count'] < 50:
         repo_result += 1
@@ -157,6 +154,7 @@ def count_repo_result(repo_files, repo_contributors,
 def print_repo_result(repo_result):
     print('Оценка репо: ' + str(repo_result))
 
+
 def eval_repository(repository):
 
     repo_contributors_json = get_repo_resource_json(
@@ -164,8 +162,6 @@ def eval_repository(repository):
                 repo_resource='/contributors',
                 repo_params=REPO_PARAMS,
             )
-
-
 
     repo_readme_json = get_repo_resource_json(
                 repository=repository,
@@ -178,7 +174,6 @@ def eval_repository(repository):
                 repo_resource='/pulls',
                 repo_params=REPO_PULL_PARAMS,
             )
-            
 
     repo_files_json = get_repo_resource_json(
                 repository=repository,
@@ -192,7 +187,6 @@ def eval_repository(repository):
             )
 
     repo_contributors = get_repo_contributors(repo_contributors_json)
-
 
     pull_requests = get_repo_pull_requests(
                 repo_pull_requests_json
@@ -218,7 +212,6 @@ def eval_repository(repository):
 
 
 if __name__ == '__main__':
-
 
     date_delta = 30
 
