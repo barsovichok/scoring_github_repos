@@ -2,13 +2,16 @@ import requests
 from datetime import datetime
 import os
 
-repo_params = {
+date_offset = 10
+date_delta = 30
+
+REPO_PARAMS = {
         'client_id': os.environ.get('client_id'),
         'client_secret':  os.environ.get('client_secret'),
     }
 
 
-repo_pull_params = {
+REPO_PULL_PARAMS = {
         'client_id': os.environ.get('client_id'),
         'client_secret':  os.environ.get('client_secret'),
         'state': 'all',
@@ -20,14 +23,14 @@ def user():
     return user
 
 def return_repo_params():
-    return repo_params
+    return REPO_PARAMS
 
 def return_repo_pull_params():
-    return repo_pull_params
+    return REPO_PULL_PARAMS
 
 def check_user_input(user):
     url = f'https://api.github.com/repos/{user}'
-    result = requests.get(url, params=repo_params).json()
+    result = requests.get(url, params=REPO_PARAMS).json()
     if result.get('message') == 'Not Found':
         return None
     else:
@@ -38,13 +41,15 @@ def check_user_input(user):
 
 def get_repo_json(repo_params, user):
     url = f'https://api.github.com/repos/{user}'
-    result = requests.get(url, params=repo_params).json()
+    result = requests.get(url, params=REPO_PARAMS).json()
+
     return result
 
 
 def get_repo_resource_json(repo_resource, repo_params, user):
     url = f'https://api.github.com/repos/{user}{repo_resource}'
     result = requests.get(url, params=repo_params).json()
+
     return result
 
 
@@ -60,10 +65,12 @@ def get_repo_pull_requests(repo_pull_requests_json, date_offset):
         list_repo = str(request['merged_at'])
         list_repo = list_repo[:date_offset]
         pull_requests.append(list_repo)
+    
 
     for pr in pull_requests:
         if pr == 'None':
             pull_requests.remove(pr)
+
 
     return pull_requests
 
@@ -119,23 +126,29 @@ def count_repo_result(repo_files, repo_contributors,
     if '.travis.yml' in repo_files:
         repo_result += 1
 
+
     if repo_contributors > 10:
         repo_result += 2
-
+    
     elif 2 < repo_contributors < 10:
         repo_result += 1
+
 
     if 'name' in repo_readme_json.keys():
         repo_result += 1
 
+
     if repo_json['license'] is not None:
         repo_result += 1
+
 
     if repo_json['forks'] != 0:
         repo_result += 1
 
+
     if repo_json['stargazers_count'] > 50:
         repo_result += 2
+    
 
     elif 1 < repo_json['stargazers_count'] < 50:
         repo_result += 1
@@ -146,68 +159,56 @@ def count_repo_result(repo_files, repo_contributors,
 def print_repo_result(repo_result):
     print('Оценка репо: ' + str(repo_result))
 
+def eval_repo(user):
 
-if __name__ == '__main__':
-
-    date_offset = 10
-    date_delta = 30
-
-    
-
-    user = user()
-
-    check_user_input = check_user_input(user)
-
-    if check_user_input is None:
-        print('Повторите ввод')
-    else:
-            repo_contributors_json = get_repo_resource_json(
+    repo_contributors_json = get_repo_resource_json(
                 user=user,
                 repo_resource='/contributors',
-                repo_params=repo_params,
+                repo_params=REPO_PARAMS,
             )
 
 
 
-            repo_readme_json = get_repo_resource_json(
+    repo_readme_json = get_repo_resource_json(
                 user=user,
                 repo_resource='/readme',
-                repo_params=repo_params,
+                repo_params=REPO_PARAMS,
             )
 
-            repo_pull_requests_json = get_repo_resource_json(
+    repo_pull_requests_json = get_repo_resource_json(
                 user=user,
                 repo_resource='/pulls',
-                repo_params=repo_pull_params,
+                repo_params=REPO_PULL_PARAMS,
             )
+            
 
-            repo_files_json = get_repo_resource_json(
+    repo_files_json = get_repo_resource_json(
                 user=user,
                 repo_resource='/contents',
-                repo_params=repo_params,
+                repo_params=REPO_PARAMS,
             )
 
-            repo_json = get_repo_json(
+    repo_json = get_repo_json(
                 user=user,
-                repo_params=repo_params,
+                repo_params=REPO_PARAMS,
             )
 
-            repo_contributors = get_repo_contributors(repo_contributors_json)
+    repo_contributors = get_repo_contributors(repo_contributors_json)
 
 
-            pull_requests = get_repo_pull_requests(
+    pull_requests = get_repo_pull_requests(
                 repo_pull_requests_json,
                 date_offset
             )
 
-            pull_request_amount = get_pull_requests_date_delta(
+    pull_request_amount = get_pull_requests_date_delta(
                 pull_requests,
                 date_delta
             )
 
-            repo_files = get_repo_file(repo_files_json)
+    repo_files = get_repo_file(repo_files_json)
 
-            repo_result = count_repo_result(
+    repo_result = count_repo_result(
                 repo_files,
                 repo_contributors,
                 pull_requests,
@@ -216,5 +217,22 @@ if __name__ == '__main__':
                 pull_request_amount
             )
 
+    return repo_result
 
-            print_repo_result(repo_result)
+
+
+
+if __name__ == '__main__':
+
+    date_offset = 10
+    date_delta = 30
+
+    user = user()
+
+    check_user_input = check_user_input(user)
+
+    if check_user_input is None:
+        print('Повторите ввод')
+    else:
+        repo_result = eval_repo(user)
+        print_repo_result(repo_result)
