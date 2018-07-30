@@ -52,7 +52,7 @@ $ client_id = your_client_id, secret_key = your_secret_key  python script.py
 
 ```
 > SET client_id = your_client_id
-> secret_key = your_secret_key 
+> SET secret_key = your_secret_key 
 > python scoring_repos.py 
 ```
 4. В консоли появится предложение ввести название репозитория в формате аккаунт/название репозитория
