@@ -15,7 +15,7 @@ def evaluate_repo():
     date_offset = 10
     date_delta = 30
     check_input = scoring_repos.check_user_input(user)
-    if check_input == None:
+    if check_input is None:
         return jsonify(
             error='Invalid values, please try again')
     else:
