@@ -9,17 +9,14 @@ def evaluate_repo():
 
     owner = request.args.get('owner', type=str)
     namerepo = request.args.get('namerepo', type=str)
-    user = owner+'/'+namerepo
+    repository = owner+'/'+namerepo
 
-
-    date_offset = 10
-    date_delta = 30
-    check_input = scoring_repos.check_user_input(user)
+    check_input = scoring_repos.check_user_input(repository)
     if check_input is None:
         return jsonify(
             error='Invalid values, please try again')
     else:
-        repo_result = scoring_repos.eval_repo(user)
+        repo_result = scoring_repos.eval_repository(repository)
         return jsonify(rate=str(repo_result))
 
 

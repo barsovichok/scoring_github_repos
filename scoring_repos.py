@@ -2,7 +2,6 @@ import requests
 from datetime import datetime
 import os
 
-date_offset = 10
 date_delta = 30
 
 REPO_PARAMS = {
@@ -18,9 +17,9 @@ REPO_PULL_PARAMS = {
     }
 
 
-def user():
-    user = input('Укажите репозиторий в формате owner/repo\n')
-    return user
+def get_repository():
+    repository = input('Укажите репозиторий в формате owner/repo\n')
+    return repository
 
 def return_repo_params():
     return REPO_PARAMS
@@ -28,8 +27,8 @@ def return_repo_params():
 def return_repo_pull_params():
     return REPO_PULL_PARAMS
 
-def check_user_input(user):
-    url = f'https://api.github.com/repos/{user}'
+def check_user_input(repository):
+    url = f'https://api.github.com/repos/{repository}'
     result = requests.get(url, params=REPO_PARAMS).json()
     if result.get('message') == 'Not Found':
         return None
@@ -39,15 +38,15 @@ def check_user_input(user):
 
 
 
-def get_repo_json(repo_params, user):
-    url = f'https://api.github.com/repos/{user}'
+def get_repo_json(repo_params, repository):
+    url = f'https://api.github.com/repos/{repository}'
     result = requests.get(url, params=REPO_PARAMS).json()
 
     return result
 
 
-def get_repo_resource_json(repo_resource, repo_params, user):
-    url = f'https://api.github.com/repos/{user}{repo_resource}'
+def get_repo_resource_json(repo_resource, repo_params, repository):
+    url = f'https://api.github.com/repos/{repository}{repo_resource}'
     result = requests.get(url, params=repo_params).json()
 
     return result
@@ -58,19 +57,12 @@ def get_repo_contributors(repo_contributors_json):
     return repo_contributors
 
 
-def get_repo_pull_requests(repo_pull_requests_json, date_offset):
+def get_repo_pull_requests(repo_pull_requests_json):
     pull_requests = []
 
     for request in repo_pull_requests_json:
         list_repo = str(request['merged_at'])
-        list_repo = list_repo[:date_offset]
         pull_requests.append(list_repo)
-    
-
-    for pr in pull_requests:
-        if pr == 'None':
-            pull_requests.remove(pr)
-
 
     return pull_requests
 
@@ -91,10 +83,16 @@ def get_pull_requests_date_delta(pull_requests, date_delta):
     count_delta = []
 
     for pull_request in pull_requests:
-        pull_request = datetime.strptime(pull_request, '%Y-%m-%d')
-        date_request.append(pull_request)
+        if pull_request == 'None':
+            pull_requests.remove(pull_request)
+        else:
+            pull_request = datetime.strptime(pull_request, '%Y-%m-%dT%H:%M:%SZ')
+            pull_request = datetime.date(pull_request)
+            date_request.append(pull_request)
+
 
     now = datetime.today()
+    now = datetime.date(now)
 
     for date in date_request:
         delta = now - date
@@ -159,10 +157,10 @@ def count_repo_result(repo_files, repo_contributors,
 def print_repo_result(repo_result):
     print('Оценка репо: ' + str(repo_result))
 
-def eval_repo(user):
+def eval_repository(repository):
 
     repo_contributors_json = get_repo_resource_json(
-                user=user,
+                repository=repository,
                 repo_resource='/contributors',
                 repo_params=REPO_PARAMS,
             )
@@ -170,26 +168,26 @@ def eval_repo(user):
 
 
     repo_readme_json = get_repo_resource_json(
-                user=user,
+                repository=repository,
                 repo_resource='/readme',
                 repo_params=REPO_PARAMS,
             )
 
     repo_pull_requests_json = get_repo_resource_json(
-                user=user,
+                repository=repository,
                 repo_resource='/pulls',
                 repo_params=REPO_PULL_PARAMS,
             )
             
 
     repo_files_json = get_repo_resource_json(
-                user=user,
+                repository=repository,
                 repo_resource='/contents',
                 repo_params=REPO_PARAMS,
             )
 
     repo_json = get_repo_json(
-                user=user,
+                repository=repository,
                 repo_params=REPO_PARAMS,
             )
 
@@ -197,8 +195,7 @@ def eval_repo(user):
 
 
     pull_requests = get_repo_pull_requests(
-                repo_pull_requests_json,
-                date_offset
+                repo_pull_requests_json
             )
 
     pull_request_amount = get_pull_requests_date_delta(
@@ -220,19 +217,17 @@ def eval_repo(user):
     return repo_result
 
 
-
-
 if __name__ == '__main__':
 
-    date_offset = 10
+
     date_delta = 30
 
-    user = user()
+    repository = get_repository()
 
-    check_user_input = check_user_input(user)
+    check_user_input = check_user_input(repository)
 
     if check_user_input is None:
         print('Повторите ввод')
     else:
-        repo_result = eval_repo(user)
+        repo_result = eval_repository(repository)
         print_repo_result(repo_result)
