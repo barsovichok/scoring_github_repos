@@ -2,7 +2,7 @@ import requests
 from datetime import datetime
 import os
 
-date_delta = 30
+DATE_DELTA = 30
 
 REPO_PARAMS = {
         'client_id': os.environ.get('client_id'),
@@ -20,14 +20,6 @@ REPO_PULL_PARAMS = {
 def get_repository():
     repository = input('Укажите репозиторий в формате owner/repo\n')
     return repository
-
-
-def return_repo_params():
-    return REPO_PARAMS
-
-
-def return_repo_pull_params():
-    return REPO_PULL_PARAMS
 
 
 def check_user_input(repository):
@@ -53,11 +45,6 @@ def get_repo_resource_json(repo_resource, repo_params, repository):
     return result
 
 
-def get_repo_contributors(repo_contributors_json):
-    repo_contributors = len(repo_contributors_json)
-    return repo_contributors
-
-
 def get_repo_pull_requests(repo_pull_requests_json):
     pull_requests = []
 
@@ -77,7 +64,7 @@ def get_repo_file(repo_files_json):
     return repo_files
 
 
-def get_pull_requests_date_delta(pull_requests, date_delta):
+def get_pull_request_amount(pull_requests, DATE_DELTA):
 
     date_request = []
     repo_delta = []
@@ -105,54 +92,54 @@ def get_pull_requests_date_delta(pull_requests, date_delta):
     repo_delta.sort()
 
     for r_delta in repo_delta:
-        if r_delta < date_delta:
+        if r_delta < DATE_DELTA:
             count_delta.append(r_delta)
 
     pull_request_amount = len(count_delta)
     return pull_request_amount
 
 
-def count_repo_result(repo_files, repo_contributors,
-                      pull_requests, repo_readme_json,
-                      repo_json, pull_request_amount):
+def count_repo_score(repo_files, repo_contributors_json,
+                     pull_requests, repo_readme_json,
+                     repo_json, pull_request_amount):
 
-    repo_result = 0
+    repo_score = 0
 
     if pull_request_amount != 0:
-        repo_result += 1
+        repo_score += 1
 
     if '.editorconfig' in repo_files:
-        repo_result += 1
+        repo_score += 1
 
     if '.travis.yml' in repo_files:
-        repo_result += 1
+        repo_score += 1
 
-    if repo_contributors > 10:
-        repo_result += 2
+    if len(repo_contributors_json) > 10:
+        repo_score += 2
 
-    elif 2 < repo_contributors < 10:
-        repo_result += 1
+    elif 2 < len(repo_contributors_json) < 10:
+        repo_score += 1
 
     if 'name' in repo_readme_json.keys():
-        repo_result += 1
+        repo_score += 1
 
     if repo_json['license'] is not None:
-        repo_result += 1
+        repo_score += 1
 
     if repo_json['forks'] != 0:
-        repo_result += 1
+        repo_score += 1
 
     if repo_json['stargazers_count'] > 50:
-        repo_result += 2
+        repo_score += 2
 
     elif 1 < repo_json['stargazers_count'] < 50:
-        repo_result += 1
+        repo_score += 1
 
-    return repo_result
+    return repo_score
 
 
-def print_repo_result(repo_result):
-    print('Оценка репо: ' + str(repo_result))
+def print_repo_result(repo_score):
+    print(f'Оценка репо: {str(repo_score)}')
 
 
 def eval_repository(repository):
@@ -186,34 +173,30 @@ def eval_repository(repository):
                 repo_params=REPO_PARAMS,
             )
 
-    repo_contributors = get_repo_contributors(repo_contributors_json)
-
     pull_requests = get_repo_pull_requests(
                 repo_pull_requests_json
             )
 
-    pull_request_amount = get_pull_requests_date_delta(
+    pull_request_amount = get_pull_request_amount(
                 pull_requests,
-                date_delta
+                DATE_DELTA
             )
 
     repo_files = get_repo_file(repo_files_json)
 
-    repo_result = count_repo_result(
+    repo_score = count_repo_score(
                 repo_files,
-                repo_contributors,
+                repo_contributors_json,
                 pull_requests,
                 repo_readme_json,
                 repo_json,
                 pull_request_amount
             )
 
-    return repo_result
+    return repo_score
 
 
 if __name__ == '__main__':
-
-    date_delta = 30
 
     repository = get_repository()
 
@@ -222,5 +205,5 @@ if __name__ == '__main__':
     if check_user_input is None:
         print('Повторите ввод')
     else:
-        repo_result = eval_repository(repository)
-        print_repo_result(repo_result)
+        repo_score = eval_repository(repository)
+        print_repo_result(repo_score)
