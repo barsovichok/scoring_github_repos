@@ -34,14 +34,12 @@ def check_user_input(repository):
 def get_repo_json(repo_params, repository):
     url = f'https://api.github.com/repos/{repository}'
     result = requests.get(url, params=REPO_PARAMS).json()
-
     return result
 
 
 def get_repo_resource_json(repo_resource, repo_params, repository):
     url = f'https://api.github.com/repos/{repository}{repo_resource}'
     result = requests.get(url, params=repo_params).json()
-
     return result
 
 
@@ -51,7 +49,6 @@ def get_repo_pull_requests(repo_pull_requests_json):
     for request in repo_pull_requests_json:
         list_repo = str(request['merged_at'])
         pull_requests.append(list_repo)
-
     return pull_requests
 
 
@@ -60,7 +57,6 @@ def get_repo_file(repo_files_json):
     for file_name in repo_files_json:
         list_repo_file = file_name['name']
         repo_files.append(list_repo_file)
-
     return repo_files
 
 
@@ -134,7 +130,6 @@ def count_repo_score(repo_files, repo_contributors_json,
 
     elif 1 < repo_json['stargazers_count'] < 50:
         repo_score += 1
-
     return repo_score
 
 
@@ -192,7 +187,6 @@ def eval_repository(repository):
                 repo_json,
                 pull_request_amount
             )
-
     return repo_score
 
 
