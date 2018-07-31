@@ -9,10 +9,12 @@ app = Flask(__name__)
 @app.route("/evaluate_repo")
 def evaluate_repo():
 
+
     owner = request.args.get('owner', type=str)
     namerepo = request.args.get('namerepo', type=str)
     redis_repo = owner+'_'+namerepo
     r = redis.Redis(host='localhost', port=6379, db=0)
+
     check_redis_repo = r.get(redis_repo)
     if check_redis_repo is None:
         repository = owner+'/'+namerepo
@@ -23,6 +25,8 @@ def evaluate_repo():
         else:
             repo_result = scoring_repos.eval_repository(repository)
             insert_redis_result = r.set(redis_repo,repo_result)
+            print(insert_redis_result)
+            r.expire(insert_redis_result,2592000)
             return jsonify(rate=str(repo_result))
     else:
         check_redis_repo = check_redis_repo.decode('utf-8')
