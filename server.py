@@ -11,13 +11,12 @@ app = Flask(__name__)
 @app.route("/evaluate_repo")
 def check_token():
     r = token_generator.create_redis_base()
-    # redis_token = input('Введите токен \n')
     owner = request.args.get('owner', type=str)
     namerepo = request.args.get('namerepo', type=str)
     token = request.args.get('token', type=str)
     check_redis_token = r.get(token)
     if check_redis_token is None:
-        return 'Вы не атворизованы, напишите на почту taya.kulagina@gmail.com'
+        return jsonify(Auth_error=str('You are not authorized, please email taya.kulagina@gmail.com'))
     else:
         redis_repo = f'{owner}_{namerepo}'
         check_redis_repo = r.get(redis_repo)
