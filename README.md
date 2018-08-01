@@ -79,6 +79,8 @@ devmanorg/fiasko_bro
 
 <h3>Запуск flask-приложения</h3>
 
+>Добавлена авторизация. Теперь, перед тем, как запустить приложение, вам нужно будет будет написать на <b>почту taya.kulagina@gmail.com с темой "Хочу токен"</b>. В ответ я пришлю вам токен, который нужно будет использовать при формировании запроса (см. ниже) 
+
 1. Скачайте репозиторий к себе локально
 2. В командной строке перейдите в директорию, где сохранён репозиторий
 3. Запустите файл <b>server.py</b> с использованием переменных
@@ -116,11 +118,11 @@ $ client_id = your_client_id, secret_key = your_secret_key  python scoring_repos
  * Running on http://0.0.0.0:80/ (Press CTRL+C to quit)
 ```
 
-5. После того, как вы получили сообщение, похожее на сообщение выше в командной строке, перейдите в браузере на страничку /evaluate_repo?owner=&namerepo=, передав в owner имя пользователя Github'a, а в namerepo - название репозитория, которые вы собираетесь оценивать.
+5. После того, как вы получили сообщение, похожее на сообщение выше в командной строке, перейдите в браузере на страничку /evaluate_repo?owner=&namerepo=&token=, передав в owner имя пользователя Github'a, в namerepo - название репозитория, которые вы собираетесь оценивать, token - присланный вам по почте токен.
 
 Пример запроса:
 ```
-http://127.1.0.0/evaluate_repo?owner=devmanorg&namerepo=fiasko_bro
+http://127.1.0.0/evaluate_repo?owner=devmanorg&namerepo=fiasko_bro&token=752d8800-e7ba-4c2b
 ```
 
 Ответ возвращается в формате json
@@ -130,17 +132,32 @@ http://127.1.0.0/evaluate_repo?owner=devmanorg&namerepo=fiasko_bro
 }
 ```
 
+<h4>Некорректный запрос</h4>
+
 В случае, если вы ввели некорректные данные репозитория, в браузере возвращается такой ответ:
 
 Пример некорректного запроса:
 ```
-http://127.0.0.1/evaluate_repo?owner=devmanjhorg&namerepo=fiasko_bro
+http://127.0.0.1/evaluate_repo?owner=devmanjhorg&namerepo=fiasko_bro&token=752d8800-e7ba-4c2b
 ```
 Пример ответа:
 ```
 {
   "error": "Invalid values, please try again"
 }
+```
+<h4>Запрос без авторизации</h4>
+
+В случае, если вы ввели невалидный токен или отправили запрос без параметра token, в браузере возвращается такой ответ:
+
+Пример некорректного запроса:
+```
+http://127.0.0.1/evaluate_repo?owner=devmanjhorg&namerepo=fiasko_bro
+```
+
+Пример ответа:
+```
+Вы не авторизованы, напишите на почту taya.kulagina@gmail.com
 ```
 
 
