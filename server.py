@@ -16,7 +16,9 @@ def check_token():
     token = request.args.get('token', type=str)
     check_redis_token = r.get(token)
     if check_redis_token is None:
-        return jsonify(Auth_error=str('You are not authorized, please email taya.kulagina@gmail.com'))
+        return jsonify(
+            error='You aren\'t authorized, pls email taya.kulagina@gmail.com'
+            )
     else:
         redis_repo = f'{owner}_{namerepo}'
         check_redis_repo = r.get(redis_repo)

@@ -158,7 +158,7 @@ http://127.0.0.1/evaluate_repo?owner=devmanjhorg&namerepo=fiasko_bro
 Пример ответа:
 ```
 {
-  "Auth_error": "You are not authorized, please email taya.kulagina@gmail.com"
+  "error": "You aren't authorized, pls email taya.kulagina@gmail.com"
 }
 ```
 
