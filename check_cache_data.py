@@ -1,8 +1,6 @@
 import scoring_repos
-import token_generator
-from flask import Flask, request, jsonify
-import redis
-import uuid
+from flask import jsonify
+
 
 def check_cache_data(owner, namerepo, redis_base):
     redis_repo = f'{owner}_{namerepo}'
@@ -20,4 +18,8 @@ def check_cache_data(owner, namerepo, redis_base):
             return jsonify(rate=repo_score)
     else:
         check_redis_repo = check_redis_repo.decode('utf-8')
+<<<<<<< HEAD:check_cache_data.py
         return jsonify(rate=check_redis_repo)
+=======
+        return jsonify(rate=str(check_redis_repo))
+>>>>>>> b0c8cc1dfd3a0bf0786fa2b2b85bdfc69ad95ec7:check_cash_data.py

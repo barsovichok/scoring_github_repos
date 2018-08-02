@@ -1,8 +1,5 @@
-import scoring_repos
 import token_generator
-from flask import Flask, request, jsonify
-import redis
-import uuid
+from flask import jsonify
 
 
 def check_auth_token(token):
@@ -13,5 +10,9 @@ def check_auth_token(token):
             error='You aren\'t authorized, pls email taya.kulagina@gmail.com'
             )
     else:
+<<<<<<< HEAD
         return None
 
+=======
+        return 'pass'
+>>>>>>> b0c8cc1dfd3a0bf0786fa2b2b85bdfc69ad95ec7
