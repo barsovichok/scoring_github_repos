@@ -24,7 +24,9 @@ def get_repository():
 
 def check_user_input(repository):
     url = f'https://api.github.com/repos/{repository}'
+    print(url)
     result = requests.get(url, params=REPO_PARAMS).json()
+    print(result)
     if result.get('message') == 'Not Found':
         return None
     else:
