@@ -22,15 +22,7 @@
 
 <h4>Важно:</h4>
 
-<<<<<<< HEAD
 >Cкрипт использует client_id и client_secret, которые необходимы для отправки запросов к api Github. Чтобы получить эти переменные, вам нужно создать OAuth App на Github'e. Как это сделать, изложено [здесь](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/). После создания приложения вам нужно будет перейти в свой профиль -> settings -> developer settings -> Oauth Apps и выбрать созданное приложение. В приложении будут указаны client_id и client_secret. Сохраните их где-нибудь, они нам скоро пригодятся.
-=======
->Cкрипт использует client_id и 
-
-
-
-, которые необходимы для отправки запросов к api Github. Чтобы получить эти переменные, вам нужно создать OAuth App на Github'e. Как это сделать, изложено [здесь](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/). После создания приложения вам нужно будет перейти в свой профиль -> settings -> developer settings -> Oauth Apps и выбрать созданное приложение. В приложении будут указаны client_id и client_secret. Сохраните их где-нибудь, они нам скоро пригодятся.
->>>>>>> 5427037c13534b88177a8af2b5e0cd59653abfba
 
 >На данный момент есть два способа использования скрипта - запуск напрямую из командной строки или запуск сервера, который будет выдавать данные в json-формате в браузере.
 
@@ -62,12 +54,8 @@ $ client_id = your_client_id, client_secret = your_client_secret  python script.
 <p>В Windows мы сначала устанавливаем переменные среды командой SET, затем запускаем скрипт</p>
 
 ```
-> SET client_id = your_client_id
-<<<<<<< HEAD
 > SET client_secret = your_client_secret
-=======
 > SET client_secret = your_client_secret 
->>>>>>> 5427037c13534b88177a8af2b5e0cd59653abfba
 > python scoring_repos.py 
 ```
 4. В консоли появится предложение ввести название репозитория в формате аккаунт/название репозитория
@@ -111,11 +99,7 @@ $ client_id = your_client_id, client_secret = your_client_secret  python scoring
 
 ```
 > SET client_id = your_client_id
-<<<<<<< HEAD
-> client_secret = your_client_secret
-=======
-> client_secret = your_client_secret 
->>>>>>> 5427037c13534b88177a8af2b5e0cd59653abfba
+> SET client_secret = your_client_secret
 > python server.py 
 ```
 
