@@ -1,5 +1,6 @@
 import eval_repo
 import scoring_repos
+import token_generator
 from flask import jsonify
 
 
@@ -13,5 +14,6 @@ def check_cache_data(owner, namerepo, redis_base):
         check_redis_repo = check_redis_repo.decode('utf-8')
         return jsonify(
             rate=check_redis_repo
-            )
+        )
+
 

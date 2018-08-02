@@ -11,4 +11,3 @@ def check_auth_token(token):
             )
     else:
         return None
-
