@@ -22,7 +22,11 @@
 
 <h4>Важно:</h4>
 
->Cкрипт использует client_id и secret_key, которые необходимы для отправки запросов к api Github. Чтобы получить эти переменные, вам нужно создать OAuth App на Github'e. Как это сделать, изложено [здесь](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/). После создания приложения вам нужно будет перейти в свой профиль -> settings -> developer settings -> Oauth Apps и выбрать созданное приложение. В приложении будут указаны client_id и secret_key. Сохраните их где-нибудь, они нам скоро пригодятся.
+>Cкрипт использует client_id и 
+
+
+
+, которые необходимы для отправки запросов к api Github. Чтобы получить эти переменные, вам нужно создать OAuth App на Github'e. Как это сделать, изложено [здесь](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/). После создания приложения вам нужно будет перейти в свой профиль -> settings -> developer settings -> Oauth Apps и выбрать созданное приложение. В приложении будут указаны client_id и client_secret. Сохраните их где-нибудь, они нам скоро пригодятся.
 
 >На данный момент есть два способа использования скрипта - запуск напрямую из командной строки или запуск сервера, который будет выдавать данные в json-формате в браузере.
 
@@ -46,7 +50,7 @@
 <p>Здесь переменные можно передать прямо при запуске приложения</p>
 
 ```
-$ client_id = your_client_id, secret_key = your_secret_key  python script.py
+$ client_id = your_client_id, client_secret = your_client_secret  python script.py
 ```
 
 <h4>Windows:</h4>
@@ -55,7 +59,7 @@ $ client_id = your_client_id, secret_key = your_secret_key  python script.py
 
 ```
 > SET client_id = your_client_id
-> SET secret_key = your_secret_key 
+> SET client_secret = your_client_secret 
 > python scoring_repos.py 
 ```
 4. В консоли появится предложение ввести название репозитория в формате аккаунт/название репозитория
@@ -90,7 +94,7 @@ devmanorg/fiasko_bro
 <p>Здесь переменные можно передать прямо при запуске приложения</p>
 
 ```
-$ client_id = your_client_id, secret_key = your_secret_key  python scoring_repos.py
+$ client_id = your_client_id, client_secret = your_client_secret  python scoring_repos.py
 ```
 
 <h4>Windows:</h4>
@@ -99,7 +103,7 @@ $ client_id = your_client_id, secret_key = your_secret_key  python scoring_repos
 
 ```
 > SET client_id = your_client_id
-> secret_key = your_secret_key 
+> client_secret = your_client_secret 
 > python server.py 
 ```
 
