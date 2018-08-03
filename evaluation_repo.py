@@ -1,11 +1,11 @@
 import repo_scoring
 from flask import jsonify
-import token_generator
+import config
 
 
 def eval_repo(owner, namerepo):
     repository = f'{owner}/{namerepo}'
-    redis_storage = token_generator.create_redis_base()
+    redis_storage = config.REDIS_STORAGE
     check_input = repo_scoring.check_user_input(repository)
     if check_input is None:
         return jsonify(
