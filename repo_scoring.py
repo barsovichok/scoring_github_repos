@@ -1,7 +1,6 @@
 import requests
 import config
 from datetime import datetime
-import os
 
 
 def get_repository():
