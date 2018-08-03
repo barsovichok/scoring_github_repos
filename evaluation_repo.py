@@ -13,8 +13,10 @@ def eval_repo(owner, namerepo):
                 error='Invalid values, please try again')
     else:
         repo_score = repo_scoring.eval_repository(repository)
-        insert_redis_result = redis_storage.set(repository, repo_score)
+        language = repo_scoring.repository_language(repository)
+        insert_redis_result = redis_storage.set(repository, [repo_score, language])
         redis_storage.expire(insert_redis_result, 2592000)
         return jsonify(
-                rate=repo_score
+                rate=repo_score,
+                language=language
         )

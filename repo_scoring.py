@@ -123,8 +123,9 @@ def count_repo_score(repo_files, repo_contributors_json,
     return repo_score
 
 
-def print_repo_result(repo_score):
+def print_repo_result():
     print(f'Оценка репо: {str(repo_score)}')
+    print((f'Языки репозитория: {languages}'))
 
 
 def eval_repository(repository):
@@ -179,6 +180,15 @@ def eval_repository(repository):
             )
     return repo_score
 
+def repository_language(repository):
+
+    repo_languages_json = get_repo_resource_json(
+                repository=repository,
+                repo_resource='/languages',
+                repo_params=REPO_PARAMS,
+            )
+    languages = list(repo_languages_json.keys())
+    return languages
 
 if __name__ == '__main__':
 
@@ -190,4 +200,5 @@ if __name__ == '__main__':
         print('Повторите ввод')
     else:
         repo_score = eval_repository(repository)
-        print_repo_result(repo_score)
+        languages = repository_language(repository)
+        print_repo_result()

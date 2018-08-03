@@ -11,5 +11,6 @@ def check_cache_data(owner, namerepo, redis_base):
     else:
         check_redis_repo = check_redis_repo.decode('utf-8')
         return jsonify(
-            rate=check_redis_repo
+            rate=check_redis_repo,
+            language=check_redis_repo
         )
