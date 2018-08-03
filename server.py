@@ -2,6 +2,8 @@ import auth
 from flask import Flask, request
 import cache_data
 import config
+import redis
+import token_generator
 
 
 app = Flask(__name__)
@@ -16,7 +18,7 @@ def return_auth_result():
         check_url = cache_data.check_cache_data(
             owner=request.args.get('owner', type=str),
             namerepo=request.args.get('namerepo', type=str),
-            redis_base=config.REDIS_STORAGE
+            redis_base=token_generator.create_redis_base()
         )
         return check_url
     else:

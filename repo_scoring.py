@@ -3,6 +3,10 @@ import config
 from datetime import datetime
 
 
+REPO_PARAMS = {'client_id': config.CLIENT_ID, 'client_secret': config.СLIENT_SECRET}
+
+REPO_PULL_PARAMS = {'client_id': config.CLIENT_ID, 'client_secret': config.СLIENT_SECRET, 'state': config.STATE}
+
 def get_repository():
     repository = input('Укажите репозиторий в формате owner/repo\n')
     return repository
@@ -10,7 +14,7 @@ def get_repository():
 
 def check_user_input(repository):
     url = f'https://api.github.com/repos/{repository}'
-    result = requests.get(url, params=config.REPO_PARAMS).json()
+    result = requests.get(url, params=REPO_PARAMS).json()
     if result.get('message') == 'Not Found':
         return None
     else:
@@ -19,7 +23,7 @@ def check_user_input(repository):
 
 def get_repo_json(repo_params, repository):
     url = f'https://api.github.com/repos/{repository}'
-    result = requests.get(url, params=config.REPO_PARAMS).json()
+    result = requests.get(url, params=REPO_PARAMS).json()
     return result
 
 
@@ -128,30 +132,30 @@ def eval_repository(repository):
     repo_contributors_json = get_repo_resource_json(
                 repository=repository,
                 repo_resource='/contributors',
-                repo_params=config.REPO_PARAMS,
+                repo_params=REPO_PARAMS,
             )
 
     repo_readme_json = get_repo_resource_json(
                 repository=repository,
                 repo_resource='/readme',
-                repo_params=config.REPO_PARAMS,
+                repo_params=REPO_PARAMS,
             )
 
     repo_pull_requests_json = get_repo_resource_json(
                 repository=repository,
                 repo_resource='/pulls',
-                repo_params=config.REPO_PULL_PARAMS,
+                repo_params=REPO_PULL_PARAMS,
             )
 
     repo_files_json = get_repo_resource_json(
                 repository=repository,
                 repo_resource='/contents',
-                repo_params=config.REPO_PARAMS,
+                repo_params=REPO_PARAMS,
             )
 
     repo_json = get_repo_json(
                 repository=repository,
-                repo_params=config.REPO_PARAMS,
+                repo_params=REPO_PARAMS,
             )
 
     pull_requests = get_repo_pull_requests(
