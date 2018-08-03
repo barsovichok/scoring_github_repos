@@ -1,9 +1,10 @@
 import redis
 import uuid
+import config
 
 
 def create_redis_base():
-    redis_storage = redis.Redis(host='localhost', port=6379, db=0)
+    redis_storage = config.REDIS_STORAGE
     return redis_storage
 
 

@@ -1,20 +1,7 @@
 import requests
+import config
 from datetime import datetime
 import os
-
-DATE_DELTA = 30
-
-REPO_PARAMS = {
-        'client_id': os.environ.get('client_id'),
-        'client_secret':  os.environ.get('client_secret'),
-    }
-
-
-REPO_PULL_PARAMS = {
-        'client_id': os.environ.get('client_id'),
-        'client_secret':  os.environ.get('client_secret'),
-        'state': 'all',
-    }
 
 
 def get_repository():
@@ -24,7 +11,7 @@ def get_repository():
 
 def check_user_input(repository):
     url = f'https://api.github.com/repos/{repository}'
-    result = requests.get(url, params=REPO_PARAMS).json()
+    result = requests.get(url, params=config.REPO_PARAMS).json()
     if result.get('message') == 'Not Found':
         return None
     else:
@@ -33,7 +20,7 @@ def check_user_input(repository):
 
 def get_repo_json(repo_params, repository):
     url = f'https://api.github.com/repos/{repository}'
-    result = requests.get(url, params=REPO_PARAMS).json()
+    result = requests.get(url, params=config.REPO_PARAMS).json()
     return result
 
 
@@ -142,30 +129,30 @@ def eval_repository(repository):
     repo_contributors_json = get_repo_resource_json(
                 repository=repository,
                 repo_resource='/contributors',
-                repo_params=REPO_PARAMS,
+                repo_params=config.REPO_PARAMS,
             )
 
     repo_readme_json = get_repo_resource_json(
                 repository=repository,
                 repo_resource='/readme',
-                repo_params=REPO_PARAMS,
+                repo_params=config.REPO_PARAMS,
             )
 
     repo_pull_requests_json = get_repo_resource_json(
                 repository=repository,
                 repo_resource='/pulls',
-                repo_params=REPO_PULL_PARAMS,
+                repo_params=config.REPO_PULL_PARAMS,
             )
 
     repo_files_json = get_repo_resource_json(
                 repository=repository,
                 repo_resource='/contents',
-                repo_params=REPO_PARAMS,
+                repo_params=config.REPO_PARAMS,
             )
 
     repo_json = get_repo_json(
                 repository=repository,
-                repo_params=REPO_PARAMS,
+                repo_params=config.REPO_PARAMS,
             )
 
     pull_requests = get_repo_pull_requests(
@@ -174,7 +161,7 @@ def eval_repository(repository):
 
     pull_request_amount = get_pull_request_amount(
                 pull_requests,
-                DATE_DELTA
+                config.DATE_DELTA
             )
 
     repo_files = get_repo_file(repo_files_json)
