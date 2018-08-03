@@ -39,14 +39,14 @@
 
 1. Скачайте репозиторий к себе локально
 2. В командной строке перейдите в директорию, где сохранён репозиторий
-3. Запустите файл <b>scoring_repos.py</b> с использованием переменных
+3. Запустите файл <b>repo_scoring.py</b> с использованием переменных
 
 <h4>Linux, Mac OS:</h4>
 
 <p>Здесь переменные можно передать прямо при запуске приложения</p>
 
 ```
-$ client_id = your_client_id, client_secret = your_client_secret  python script.py
+$ client_id = your_client_id, client_secret = your_client_secret  python repo_scoring.py
 ```
 
 <h4>Windows:</h4>
@@ -56,18 +56,18 @@ $ client_id = your_client_id, client_secret = your_client_secret  python script.
 ```
 > SET client_secret = your_client_secret
 > SET client_secret = your_client_secret 
-> python scoring_repos.py 
+> python repo_scoring.py 
 ```
 4. В консоли появится предложение ввести название репозитория в формате аккаунт/название репозитория
 
 ```
->python scoring_repos.py
+>python repo_scoring.py
 Укажите репозиторий в формате owner/repo
 devmanorg/fiasko_bro # пример ввода репозитория
 ```
 5. На выходе cкрипт выдает оценку в таком формате.
 ```
->python scoring_repos.py
+>python repo_scoring.py
 Укажите репозиторий в формате owner/repo
 devmanorg/fiasko_bro
 Оценка репо: 8
@@ -90,7 +90,7 @@ devmanorg/fiasko_bro
 <p>Здесь переменные можно передать прямо при запуске приложения</p>
 
 ```
-$ client_id = your_client_id, client_secret = your_client_secret  python scoring_repos.py
+$ client_id = your_client_id, client_secret = your_client_secret  python server.py
 ```
 
 <h4>Windows:</h4>
@@ -158,7 +158,7 @@ http://127.0.0.1/evaluate_repo?owner=devmanjhorg&namerepo=fiasko_bro
 Пример ответа:
 ```
 {
-  "error": "You aren't authorized, pls email taya.kulagina@gmail.com"
+  "error": "You aren't authorized"
 }
 ```
 

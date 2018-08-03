@@ -1,7 +1,7 @@
 import token_generator
-import check_auth
+import auth
 from flask import Flask, request
-import check_cache_data
+import cache_data
 
 
 app = Flask(__name__)
@@ -9,11 +9,11 @@ app = Flask(__name__)
 
 @app.route("/evaluate_repo")
 def return_auth_result():
-    auth_token = check_auth.check_auth_token(
+    auth_token = auth.check_auth_token(
         request.args.get('token', type=str)
     )
     if auth_token is None:
-        check_url = check_cache_data.check_cache_data(
+        check_url = cache_data.check_cache_data(
             owner=request.args.get('owner', type=str),
             namerepo=request.args.get('namerepo', type=str),
             redis_base=token_generator.create_redis_base()
