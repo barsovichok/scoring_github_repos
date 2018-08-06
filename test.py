@@ -1,6 +1,5 @@
 import requests
 import config
-from bs4 import BeautifulSoup
 import os
 import glob
 import zipfile
@@ -50,10 +49,29 @@ def find_modules(files):
     finder = ModuleFinder()
     for file in files:
         finder.run_script(file)
-    print('Loaded modules:')
+    
     for name, mod in finder.modules.items():
-        print('%s: ' % name, end='')
-        print(','.join(list(mod.globalnames.keys())[:3]))
+        if name == '__main__':
+            # print('%s: ' % name, end='')
+            repo_modules = ','.join(list(mod.globalnames.keys()))
+    return repo_modules
+
+def check_modules(repo_modules):
+    found_modules = []
+
+    if 'requests' in repo_modules:
+        found_modules.append('requests')
+
+    if 'BeautifulSoup' in repo_modules:
+        found_modules.append('BeautifulSoup')
+
+    if 'Django' in repo_modules:
+        found_modules.append('Django')
+
+    if 'Flask' in repo_modules:
+        found_modules.append('Flask')
+
+    print(f'Обнаруженные модули: {found_modules}')
 
 
 if __name__ == '__main__':
@@ -67,4 +85,6 @@ if __name__ == '__main__':
             )
     unpack_repo_files(repo_name)
     files = iterate_repo_files(repo_name)
-    find_modules(files)
+    repo_modules = find_modules(files)
+    check_modules(repo_modules)
+
