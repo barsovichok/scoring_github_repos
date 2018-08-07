@@ -11,12 +11,6 @@ REPO_PARAMS = {
     'client_secret': config.СLIENT_SECRET
 }
 
-REPO_PULL_PARAMS = {
-    'client_id': config.CLIENT_ID,
-    'client_secret': config.СLIENT_SECRET,
-    'state': config.STATE
-}
-
 
 def get_repository():
     repository = input('Укажите репозиторий в формате owner/repo\n')
@@ -52,7 +46,6 @@ def find_modules(files):
     
     for name, mod in finder.modules.items():
         if name == '__main__':
-            # print('%s: ' % name, end='')
             repo_modules = ','.join(list(mod.globalnames.keys()))
     return repo_modules
 
@@ -71,6 +64,9 @@ def check_modules(repo_modules):
     if 'Flask' in repo_modules:
         found_modules.append('Flask')
 
+    return found_modules
+
+def print_result(found_modules):    
     print(f'Обнаруженные модули: {found_modules}')
 
 
@@ -86,5 +82,6 @@ if __name__ == '__main__':
     unpack_repo_files(repo_name)
     files = iterate_repo_files(repo_name)
     repo_modules = find_modules(files)
-    check_modules(repo_modules)
+    found_modules = check_modules(repo_modules)
+    print_result(found_modules)
 
