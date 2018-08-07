@@ -1,6 +1,4 @@
 import os
-import redis
-
 
 DATE_DELTA = 30
 CLIENT_ID = os.environ.get('client_id')

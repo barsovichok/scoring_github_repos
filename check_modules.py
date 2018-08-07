@@ -43,11 +43,12 @@ def find_modules(files):
     finder = ModuleFinder()
     for file in files:
         finder.run_script(file)
-    
+
     for name, mod in finder.modules.items():
         if name == '__main__':
             repo_modules = ','.join(list(mod.globalnames.keys()))
     return repo_modules
+
 
 def check_modules(repo_modules):
     found_modules = []
@@ -66,7 +67,8 @@ def check_modules(repo_modules):
 
     return found_modules
 
-def print_result(found_modules):    
+
+def print_result(found_modules):
     print(f'Обнаруженные модули: {found_modules}')
 
 
@@ -84,4 +86,3 @@ if __name__ == '__main__':
     repo_modules = find_modules(files)
     found_modules = check_modules(repo_modules)
     print_result(found_modules)
-

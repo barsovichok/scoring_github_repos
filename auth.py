@@ -1,7 +1,5 @@
 from flask import Response
 import json
-import config
-import redis
 import token_generator
 
 

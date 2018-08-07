@@ -2,7 +2,6 @@ import auth
 from flask import Flask, request
 import cache_data
 import config
-import redis
 import token_generator
 import check_modules
 import json
@@ -26,16 +25,20 @@ def return_auth_result():
     else:
         return auth_token
 
+
 @app.route("/check_repo_modules")
 def return_check_modules():
     auth_token = auth.check_auth_token(
         request.args.get('token', type=str)
     )
     if auth_token is None:
-        owner=request.args.get('owner', type=str)
-        namerepo=request.args.get('namerepo', type=str)
+        owner = request.args.get('owner', type=str)
+        namerepo = request.args.get('namerepo', type=str)
         repository = f'{owner}/{namerepo}'
-        REPO_PARAMS = {'client_id':config.CLIENT_ID, 'client_secret':config.СLIENT_SECRET}
+        REPO_PARAMS = {
+            'client_id': config.CLIENT_ID,
+            'client_secret': config.СLIENT_SECRET
+        }
         repo_name = check_modules.get_repo_resource_json(
                 repository=repository,
                 repo_resource='/zipball/master',
