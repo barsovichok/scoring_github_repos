@@ -5,6 +5,8 @@ import config
 import token_generator
 import check_modules
 import json
+import modules_cache
+import module_search
 
 
 app = Flask(__name__)
@@ -32,25 +34,13 @@ def return_check_modules():
         request.args.get('token', type=str)
     )
     if auth_token is None:
-        owner = request.args.get('owner', type=str)
-        namerepo = request.args.get('namerepo', type=str)
-        repository = f'{owner}/{namerepo}'
-        REPO_PARAMS = {
-            'client_id': config.CLIENT_ID,
-            'client_secret': config.СLIENT_SECRET
-        }
-        repo_name = check_modules.get_repo_resource_json(
-                repository=repository,
-                repo_resource='/zipball/master',
-                repo_params=REPO_PARAMS,
-            )
-        check_modules.unpack_repo_files(repo_name)
-        files = check_modules.iterate_repo_files(repo_name)
-        repo_modules = check_modules.find_modules(files)
-        found_modules = check_modules.check_modules(repo_modules)
-        return json.dumps(
-            {'Found modules': found_modules}
+
+        check_url = modules_cache.check_cache_data(
+            owner=request.args.get('owner', type=str),
+            namerepo=request.args.get('namerepo', type=str),
+            redis_base=token_generator.create_redis_base()
         )
+        return check_url
     else:
         return auth_token
 
