@@ -1,12 +1,8 @@
 import auth
 from flask import Flask, request
 import cache_data
-import config
 import token_generator
-import check_modules
-import json
 import modules_cache
-import module_search
 
 
 app = Flask(__name__)

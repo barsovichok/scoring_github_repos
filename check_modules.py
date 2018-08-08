@@ -26,16 +26,18 @@ def get_repo_resource_json(repo_resource, repo_params, repository):
     with open(rawfile, 'wb') as fd:
         for chunk in result.iter_content(chunk_size=128):
             fd.write(chunk)
-    return repo_name
+    return rawfile
 
 
-def unpack_repo_files(repo_name):
-    repo_zip = zipfile.ZipFile(f'{repo_name}.zip')
-    repo_zip.extractall(f'{repo_name}')
+def unpack_repo_files(rawfile):
+    repo_zip = zipfile.ZipFile(rawfile)
+    repo_zip_dir = f'{rawfile}_dir'
+    repo_zip.extractall(f'{rawfile}_dir')
+    return repo_zip_dir
 
 
-def iterate_repo_files(repo_name):
-    files = glob.glob(repo_name + '/**/*.py', recursive=True)
+def iterate_repo_files(repo_zip_dir):
+    files = glob.glob(repo_zip_dir + '/**/*.py', recursive=True)
     return files
 
 
@@ -76,13 +78,13 @@ if __name__ == '__main__':
 
     repository = get_repository()
 
-    repo_name = get_repo_resource_json(
+    rawfile = get_repo_resource_json(
                 repository=repository,
                 repo_resource='/zipball/master',
                 repo_params=REPO_PARAMS,
             )
-    unpack_repo_files(repo_name)
-    files = iterate_repo_files(repo_name)
+    repo_zip_dir = unpack_repo_files(rawfile)
+    files = iterate_repo_files(repo_zip_dir)
     repo_modules = find_modules(files)
     found_modules = check_modules(repo_modules)
     print_result(found_modules)

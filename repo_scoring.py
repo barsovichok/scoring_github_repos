@@ -3,9 +3,17 @@ import config
 from datetime import datetime
 
 
-REPO_PARAMS = {'client_id': config.CLIENT_ID, 'client_secret': config.СLIENT_SECRET}
+REPO_PARAMS = {
+    'client_id': config.CLIENT_ID,
+    'client_secret': config.СLIENT_SECRET
+}
 
-REPO_PULL_PARAMS = {'client_id': config.CLIENT_ID, 'client_secret': config.СLIENT_SECRET, 'state': config.STATE}
+REPO_PULL_PARAMS = {
+    'client_id': config.CLIENT_ID,
+    'client_secret': config.СLIENT_SECRET,
+    'state': config.STATE
+}
+
 
 def get_repository():
     repository = input('Укажите репозиторий в формате owner/repo\n')
@@ -180,6 +188,7 @@ def eval_repository(repository):
             )
     return repo_score
 
+
 def repository_language(repository):
 
     repo_languages_json = get_repo_resource_json(
@@ -189,6 +198,7 @@ def repository_language(repository):
             )
     languages = list(repo_languages_json.keys())
     return languages
+
 
 if __name__ == '__main__':
 
