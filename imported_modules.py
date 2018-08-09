@@ -16,18 +16,15 @@ def find_import_modules(imported_modules):
                 imported_modules += [l.strip() for l in line[7:].split(',')]
             elif line.startswith('from'):
                 from_module = line[5:].split(',')
-                imported_modules += from_module
+                from_module = from_module[0]
+                from_module = from_module.split(' ')
+                from_module = from_module[0]
+                imported_modules.append(from_module)
             else:
                 break
 
 def delete_doubled_assignments(imported_modules):
-    list_modules = []
-    for module in imported_modules:
-        module = module.split(' ')
-        module = module[0]
-        list_modules.append(module)
-
-    list_modules = set(list_modules)
+    list_modules = set(imported_modules)
     list_modules = list(list_modules)
     return list_modules
 
