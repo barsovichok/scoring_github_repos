@@ -3,8 +3,8 @@ import config
 import os
 import glob
 import zipfile
-from modulefinder import ModuleFinder
-
+import imported_modules
+import shutil
 
 REPO_PARAMS = {
     'client_id': config.CLIENT_ID,
@@ -30,8 +30,8 @@ def get_repo_resource_json(repo_resource, repo_params, repository):
 
 
 def unpack_repo_files(rawfile):
-    repo_zip = zipfile.ZipFile(rawfile)
     repo_zip_dir = f'{rawfile}_dir'
+    repo_zip = zipfile.ZipFile(rawfile)
     repo_zip.extractall(f'{rawfile}_dir')
     return repo_zip_dir
 
@@ -42,13 +42,7 @@ def iterate_repo_files(repo_zip_dir):
 
 
 def find_modules(files):
-    finder = ModuleFinder()
-    for file in files:
-        finder.run_script(file)
-
-    for name, mod in finder.modules.items():
-        if name == '__main__':
-            repo_modules = ','.join(list(mod.globalnames.keys()))
+    repo_modules = imported_modules.find_import_modules(files)
     return repo_modules
 
 
@@ -58,20 +52,78 @@ def check_modules(repo_modules):
     if 'requests' in repo_modules:
         found_modules.append('requests')
 
-    if 'BeautifulSoup' in repo_modules:
+    if 'beautifulsoup' in repo_modules:
         found_modules.append('BeautifulSoup')
 
-    if 'Django' in repo_modules:
+    if 'django' in repo_modules:
         found_modules.append('Django')
 
-    if 'Flask' in repo_modules:
+    if 'flask' in repo_modules:
         found_modules.append('Flask')
+
+    if 'uuid' in repo_modules:
+        found_modules.append('uuid')
+
+    if 'redis' in repo_modules:
+        found_modules.append('redis')
+
+    if 'os' in repo_modules:
+        found_modules.append('os')
+
+    if 'zipfile' in repo_modules:
+        found_modules.append('ZipFile')
+
+    if 'datetime' in repo_modules:
+        found_modules.append('datetime')
+
+    if 'modulefinder' in repo_modules:
+        found_modules.append('ModuleFinder')
+
+    if 'setuptools' in repo_modules:
+        found_modules.append('setuptools')
+
+    if 'collections' in repo_modules:
+        found_modules.append('collections')
+
+    if 'openpyxl' in repo_modules:
+        found_modules.append('openpyxl')
+
+    if 'bs4' in repo_modules:
+        found_modules.append('bs4')
+
+    if 'functools' in repo_modules:
+        found_modules.append('functools')
+
+    if 'json' in repo_modules:
+        found_modules.append('json')
+
+    if 'glob' in repo_modules:
+        found_modules.append('glob')
 
     return found_modules
 
 
 def print_result(found_modules):
     print(f'Обнаруженные модули: {found_modules}')
+
+
+def delete_download_files(rawfile, repo_zip_dir):
+    rawfile_dir = rawfile[:-4]
+    path = os.path.join(os.path.abspath(
+        os.path.dirname(__file__)),
+        rawfile
+    )
+    rawfile_dir = os.path.join(os.path.abspath(
+        os.path.dirname(__file__)),
+        rawfile_dir
+    )
+    repo_zip_dir = os.path.join(os.path.abspath(
+        os.path.dirname(__file__)),
+        repo_zip_dir
+    )
+    os.remove(path)
+    shutil.rmtree(rawfile_dir)
+    shutil.rmtree(repo_zip_dir)
 
 
 if __name__ == '__main__':
@@ -85,6 +137,7 @@ if __name__ == '__main__':
             )
     repo_zip_dir = unpack_repo_files(rawfile)
     files = iterate_repo_files(repo_zip_dir)
-    repo_modules = find_modules(files)
+    repo_modules = imported_modules.find_import_modules(files)
     found_modules = check_modules(repo_modules)
     print_result(found_modules)
+    delete_download_files(rawfile, repo_zip_dir)

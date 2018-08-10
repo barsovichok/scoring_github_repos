@@ -20,6 +20,7 @@ def find_api_modules(repository):
     redis_storage.expire(
         insert_redis_result, 2592000
     )
+    check_modules.delete_download_files(rawfile, repo_zip_dir)
     return json.dumps(
             {'Found modules': found_modules}
     )
