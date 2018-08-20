@@ -8,3 +8,10 @@ STATE = 'all'
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 REDIS_DB = 0
+MODULES = [
+	'requests', 'BeautifulSoup', 'Django',
+	'Flask', 'redis', 'ModuleFinder',
+	'setuptools', 'collections', 'openpyxl',
+	'bs4', 'functools',
+	'bootstrap', 'html', 'css'
+]

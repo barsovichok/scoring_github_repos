@@ -43,58 +43,12 @@ def find_modules(files):
 
 def check_modules(repo_modules):
     found_modules = []
+    for module in repo_modules:
+        if module in config.MODULES:
+            found_modules.append(module)
 
-    if 'requests' in repo_modules:
-        found_modules.append('requests')
-
-    if 'beautifulsoup' in repo_modules:
-        found_modules.append('BeautifulSoup')
-
-    if 'django' in repo_modules:
-        found_modules.append('Django')
-
-    if 'flask' in repo_modules:
-        found_modules.append('Flask')
-
-    if 'uuid' in repo_modules:
-        found_modules.append('uuid')
-
-    if 'redis' in repo_modules:
-        found_modules.append('redis')
-
-    if 'os' in repo_modules:
-        found_modules.append('os')
-
-    if 'zipfile' in repo_modules:
-        found_modules.append('ZipFile')
-
-    if 'datetime' in repo_modules:
-        found_modules.append('datetime')
-
-    if 'modulefinder' in repo_modules:
-        found_modules.append('ModuleFinder')
-
-    if 'setuptools' in repo_modules:
-        found_modules.append('setuptools')
-
-    if 'collections' in repo_modules:
-        found_modules.append('collections')
-
-    if 'openpyxl' in repo_modules:
-        found_modules.append('openpyxl')
-
-    if 'bs4' in repo_modules:
-        found_modules.append('bs4')
-
-    if 'functools' in repo_modules:
-        found_modules.append('functools')
-
-    if 'json' in repo_modules:
-        found_modules.append('json')
-
-    if 'glob' in repo_modules:
-        found_modules.append('glob')
-
+    clear_modules = set(found_modules)
+    found_modules = list(clear_modules)
     return found_modules
 
 
