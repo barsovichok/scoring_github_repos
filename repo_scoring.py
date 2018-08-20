@@ -15,9 +15,9 @@ REPO_PULL_PARAMS = {
 }
 
 
-def get_repository():
-    repository = input('Укажите репозиторий в формате owner/repo\n')
-    return repository
+# def get_repository():
+#     repository = input('Укажите репозиторий в формате owner/repo\n')
+#     return repository
 
 
 def check_user_input(repository):
@@ -134,6 +134,8 @@ def count_repo_score(repo_files, repo_contributors_json,
 def print_repo_result():
     print(f'Оценка репо: {str(repo_score)}')
     print((f'Языки репозитория: {languages}'))
+    print(f'{REPO_PARAMS}')
+    print(f'{repository}')
 
 
 def eval_repository(repository):
@@ -202,7 +204,7 @@ def repository_language(repository):
 
 if __name__ == '__main__':
 
-    repository = get_repository()
+    repository = config.REPOSITORY
 
     check_user_input = check_user_input(repository)
 

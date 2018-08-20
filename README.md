@@ -22,7 +22,7 @@
 
 <h4>Важно:</h4>
 
->Cкрипт использует client_id и client_secret, которые необходимы для отправки запросов к api Github. Чтобы получить эти переменные, вам нужно создать OAuth App на Github'e. Как это сделать, изложено [здесь](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/). После создания приложения вам нужно будет перейти в свой профиль -> settings -> developer settings -> Oauth Apps и выбрать созданное приложение. В приложении будут указаны client_id и client_secret. Сохраните их где-нибудь, они нам скоро пригодятся.
+>Cкрипт использует client_id и client_secret, которые необходимы для отправки запросов к API Github. Чтобы получить эти переменные, вам нужно создать OAuth App на Github'e. Как это сделать, изложено [здесь](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/). После создания приложения вам нужно будет перейти в свой профиль -> settings -> developer settings -> Oauth Apps и выбрать созданное приложение. В приложении будут указаны client_id и client_secret. Сохраните их где-нибудь, они нам скоро пригодятся.
 
 >На данный момент есть два способа использования скрипта - запуск напрямую из командной строки или запуск сервера, который будет выдавать данные в json-формате в браузере.
 
@@ -46,7 +46,7 @@
 <p>Здесь переменные можно передать прямо при запуске приложения</p>
 
 ```
-$ client_id = your_client_id, client_secret = your_client_secret  python repo_scoring.py
+$ СLIENT_ID = your_client_id, СLIENT_SECRET = your_client_secret  python repo_scoring.py
 ```
 
 <h4>Windows:</h4>
@@ -54,8 +54,8 @@ $ client_id = your_client_id, client_secret = your_client_secret  python repo_sc
 <p>В Windows мы сначала устанавливаем переменные среды командой SET, затем запускаем скрипт</p>
 
 ```
-> SET client_secret = your_client_secret
-> SET client_secret = your_client_secret 
+> SET CLIENT_ID = your_client_id
+> SET CLIENT_SECRET = your_client_secret 
 > python repo_scoring.py 
 ```
 4. В консоли появится предложение ввести название репозитория в формате аккаунт/название репозитория
@@ -79,7 +79,7 @@ devmanorg/fiasko_bro
 
 <h3>Запуск flask-приложения</h3>
 
->Добавлена авторизация. Теперь, перед тем, как запустить приложение, вам нужно будет будет написать на <b>почту taya.kulagina@gmail.com с темой "Хочу токен"</b>. В ответ я пришлю вам токен, который нужно будет использовать при формировании запроса (см. ниже) 
+>Добавлена авторизация. Теперь, перед тем, как запустить приложение, вам нужно будет написать на <b>почту taya.kulagina@gmail.com с темой "Хочу токен"</b>. В ответ я пришлю вам токен, который нужно будет использовать при формировании запроса (см. ниже) 
 
 1. Скачайте репозиторий к себе локально
 2. В командной строке перейдите в директорию, где сохранён репозиторий
@@ -90,7 +90,7 @@ devmanorg/fiasko_bro
 <p>Здесь переменные можно передать прямо при запуске приложения</p>
 
 ```
-$ client_id = your_client_id, client_secret = your_client_secret  python server.py
+$ СLIENT_ID = your_client_id, СLIENT_SECRET = your_client_secret  python server.py
 ```
 
 <h4>Windows:</h4>
@@ -98,8 +98,8 @@ $ client_id = your_client_id, client_secret = your_client_secret  python server.
 <p>В Windows мы сначала устанавливаем переменные среды командой SET, затем запускаем скрипт</p>
 
 ```
-> SET client_id = your_client_id
-> SET client_secret = your_client_secret
+> SET СLIENT_ID = your_client_id
+> SET СLIENT_SECRET = your_client_secret
 > python server.py 
 ```
 

@@ -12,11 +12,6 @@ REPO_PARAMS = {
 }
 
 
-def get_repository():
-    repository = input('Укажите репозиторий в формате owner/repo\n')
-    return repository
-
-
 def get_repo_resource_json(repo_resource, repo_params, repository):
     url = f'https://api.github.com/repos/{repository}{repo_resource}'
     result = requests.get(url, params=repo_params, allow_redirects=True)
@@ -103,10 +98,6 @@ def check_modules(repo_modules):
     return found_modules
 
 
-def print_result(found_modules):
-    print(f'Обнаруженные модули: {found_modules}')
-
-
 def delete_download_files(rawfile, repo_zip_dir):
     rawfile_dir = rawfile[:-4]
     path = os.path.join(os.path.abspath(
@@ -128,7 +119,7 @@ def delete_download_files(rawfile, repo_zip_dir):
 
 if __name__ == '__main__':
 
-    repository = get_repository()
+    repository = input('Укажите репозиторий в формате owner/repo\n')
 
     rawfile = get_repo_resource_json(
                 repository=repository,
@@ -139,5 +130,5 @@ if __name__ == '__main__':
     files = iterate_repo_files(repo_zip_dir)
     repo_modules = imported_modules.find_import_modules(files)
     found_modules = check_modules(repo_modules)
-    print_result(found_modules)
+    print(f'Обнаруженные модули: {found_modules}')
     delete_download_files(rawfile, repo_zip_dir)

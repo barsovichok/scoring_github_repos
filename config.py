@@ -1,8 +1,9 @@
 import os
 
 DATE_DELTA = 30
-CLIENT_ID = os.environ.get('client_id')
-СLIENT_SECRET = os.environ.get('client_secret')
+CLIENT_ID = os.environ.get('CLIENT_ID')
+СLIENT_SECRET = os.environ.get('СLIENT_SECRET')
+REPOSITORY = os.environ.get('REPOSITORY')
 STATE = 'all'
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
