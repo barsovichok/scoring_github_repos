@@ -10,9 +10,9 @@ def find_api_modules(repository):
         repo_resource='/zipball/master',
         repo_params=check_modules.REPO_PARAMS)
     repo_zip_dir = check_modules.unpack_repo_files(rawfile)
-    files = check_modules.iterate_repo_files(repo_zip_dir)
+    files = check_modules.iterate_repo_py_files(repo_zip_dir)
     repo_modules = check_modules.find_modules(files)
-    found_modules = check_modules.check_modules(repo_modules)
+    found_modules = check_modules.check_if_repo_has_seeking_modules(repo_modules)
     redis_repository = '{}{}'.format(repository.replace('/', '_'), '_modules')
     insert_redis_result = redis_storage.set(
         redis_repository, found_modules

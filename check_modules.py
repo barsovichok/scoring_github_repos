@@ -31,7 +31,7 @@ def unpack_repo_files(rawfile):
     return repo_zip_dir
 
 
-def iterate_repo_files(repo_zip_dir):
+def iterate_repo_py_files(repo_zip_dir):
     files = glob.glob(repo_zip_dir + '/**/*.py', recursive=True)
     return files
 
@@ -41,7 +41,7 @@ def find_modules(files):
     return repo_modules
 
 
-def check_modules(repo_modules):
+def check_if_repo_has_seeking_modules(repo_modules):
     found_modules = []
     for module in repo_modules:
         if module in config.MODULES:
@@ -83,6 +83,6 @@ if __name__ == '__main__':
     repo_zip_dir = unpack_repo_files(rawfile)
     files = iterate_repo_files(repo_zip_dir)
     repo_modules = imported_modules.find_import_modules(files)
-    found_modules = check_modules(repo_modules)
+    found_modules = check_if_repo_has_seeking_modules(repo_modules)
     print(f'Обнаруженные модули: {found_modules}')
     delete_download_files(rawfile, repo_zip_dir)

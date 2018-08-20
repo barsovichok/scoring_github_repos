@@ -3,7 +3,7 @@ from flask import jsonify
 import token_generator
 
 
-def eval_repo(owner, namerepo):
+def evaluate_repo(owner, namerepo):
     repository = f'{owner}/{namerepo}'
     redis_storage = token_generator.create_redis_base()
     check_input = repo_scoring.check_user_input(repository)
