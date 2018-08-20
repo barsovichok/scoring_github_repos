@@ -1,12 +1,13 @@
 from flask import Response, jsonify
 import json
 import token_generator
+import config
 
 
 def check_auth_token(token):
     redis_base = token_generator.create_redis_base()
     redis_token = redis_base.get(token)
     if redis_token is None:
-        return Response('{error: You aren\'t authorized}', status=401, mimetype='application/json')
+        return config.AUTHORIZE_ERROR
     else:
         return None

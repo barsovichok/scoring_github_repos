@@ -15,3 +15,5 @@ MODULES = [
 	'bs4', 'functools',
 	'bootstrap', 'html', 'css'
 ]
+INVALID_ERROR = 'Invalid values, please try again'
+AUTHORIZE_ERROR = "You aren\'t authorized"
