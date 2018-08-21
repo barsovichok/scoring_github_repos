@@ -15,7 +15,7 @@ def return_auth_result():
     auth_result = auth.check_auth_token(
         request.args.get('token', type=str)
     )
-    if auth_result is None:
+    if auth_result is True:
         repo_result = cache_data.check_cache_data(
             owner=request.args.get('owner', type=str),
             namerepo=request.args.get('namerepo', type=str),
@@ -27,7 +27,7 @@ def return_auth_result():
             repo_score, language = repo_result
             return jsonify(repo_score=repo_score, language=language)
     else:
-        return Response(json.dumps({'error':auth_result}), status=401, mimetype='application/json')
+        return Response(json.dumps({'error':config.AUTHORIZE_ERROR}), status=401, mimetype='application/json')
 
 
 @app.route("/check_repo_modules")

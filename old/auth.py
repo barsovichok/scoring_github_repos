@@ -8,6 +8,6 @@ def check_auth_token(token):
     redis_base = token_generator.create_redis_base()
     redis_token = redis_base.get(token)
     if redis_token is None:
-        return config.AUTHORIZE_ERROR
+        return False
     else:
-        return None
+        return True

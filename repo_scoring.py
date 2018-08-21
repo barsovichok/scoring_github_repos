@@ -15,11 +15,6 @@ REPO_PULL_PARAMS = {
 }
 
 
-# def get_repository():
-#     repository = input('Укажите репозиторий в формате owner/repo\n')
-#     return repository
-
-
 def check_user_input(repository):
     url = f'https://api.github.com/repos/{repository}'
     result = requests.get(url, params=REPO_PARAMS).json()

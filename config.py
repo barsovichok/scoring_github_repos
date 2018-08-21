@@ -9,11 +9,10 @@ REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 REDIS_DB = 0
 MODULES = [
-	'requests', 'BeautifulSoup', 'django',
-	'Flask', 'redis', 'ModuleFinder',
-	'setuptools', 'collections', 'openpyxl',
-	'bs4', 'functools',
-	'bootstrap', 'html', 'css'
+    'requests', 'BeautifulSoup', 'django',
+    'Flask', 'redis', 'ModuleFinder',
+    'setuptools', 'collections', 'openpyxl',
+    'bs4', 'functools',
 ]
 INVALID_ERROR = 'Invalid values, please try again'
-AUTHORIZE_ERROR = "You aren\'t authorized"
+AUTHORIZE_ERROR = '{"error":"You aren\'t authorized"}'
