@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, render_template, redirect
 import config
 import check_data
 
@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 @app.route("/evaluate_repo")
-def return_repo_auth_result():
+def return_evaluate_repo():
     auth_result = check_data.check_auth_token(
         request.args.get('token', type=str)
     )
@@ -52,6 +52,7 @@ def return_repo_auth_result():
             mimetype='application/json'
         )
 
+
 @app.route("/check_repo_modules")
 def return_module_auth_result():
     auth_result = check_data.check_auth_token(
@@ -71,8 +72,8 @@ def return_module_auth_result():
                 return jsonify(error=config.INVALID_ERROR)
             else:
                 repo_modules = check_data.find_api_modules(
-                owner=request.args.get('owner', type=str),
-                namerepo=request.args.get('namerepo', type=str)
+                    owner=request.args.get('owner', type=str),
+                    namerepo=request.args.get('namerepo', type=str)
                 )
             return jsonify(found_modules=repo_modules)
         else:
@@ -89,21 +90,27 @@ def return_module_auth_result():
         )
 
 
+@app.route('/')
+def start():
+    return render_template('render_template.html')
 
 
-# def return_check_modules():
-#     auth_token = auth.check_auth_token(
-#         request.args.get('token', type=str)
-#     )
-#     if auth_token is None:
-#         check_url = modules_cache.check_cache_data(
-#             owner=request.args.get('owner', type=str),
-#             namerepo=request.args.get('namerepo', type=str),
-#             redis_base=token_generator.create_redis_base()
-#         )
-#         return jsonify(check_url)
-#     else:
-#         return jsonify(auth_token)
+@app.route('/', methods=['POST'])
+def my_form_post():
+    namerepo = request.form['repo']
+    owner = request.form['owner']
+    token = request.form['token']
+    choose_repo_evaluate = request.form['choose_repo_evaluate']
+    if choose_repo_evaluate == 'Оценить репозиторий':
+        return redirect(
+            f'/evaluate_repo?namerepo={namerepo}&owner={owner}&token={token}'
+        )
+    else:
+        return redirect(
+            f'/check_repo_modules?namerepo={namerepo}&owner={owner}&token={token}'
+        )
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80, debug=True)
+

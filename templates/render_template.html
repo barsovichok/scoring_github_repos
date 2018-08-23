@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Поле для ввода пароля</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>Форма входа</h1>
+
+    <form action="http://127.0.0.1" method="post">
+      <label for="owner">Профиль пользователя на Github</label>
+      <input type="text" name="owner" id="owner">
+      <br>
+      <br>
+      <label for="repo">Название репозитория</label>
+      <input type="text" name="repo" id="repo">
+      <br>
+      <br>
+      <label for="token">Ваш токен</label>
+      <input type="text" name="token" id="token">
+      <br>
+      <br>
+      <p>Выберите, что сделать - оценить репозиторий или узнать, какие технологии там используются</p>
+
+      <p><i>Выбрать:</i></p>
+      <select name="choose_repo_evaluate">
+        <option>Оценить репозиторий</option>
+        <option>Узнать, какие там модули</option>
+      </select>
+      <input type="submit" value="Поехали!">
+    </form>
+  </body>
+</html>
