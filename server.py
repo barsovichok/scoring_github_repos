@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 @app.route("/evaluate_repo")
-def return_auth_result():
+def return_repo_auth_result():
     auth_result = check_data.check_auth_token(
         request.args.get('token', type=str)
     )
@@ -52,6 +52,58 @@ def return_auth_result():
             mimetype='application/json'
         )
 
+@app.route("/check_repo_modules")
+def return_module_auth_result():
+    auth_result = check_data.check_auth_token(
+        request.args.get('token', type=str)
+    )
+    if auth_result is True:
+        check_url = check_data.check_module_cache(
+            owner=request.args.get('owner', type=str),
+            namerepo=request.args.get('namerepo', type=str)
+        )
+        if check_url is False:
+            repo = check_data.check_user_input(
+                owner=request.args.get('owner', type=str),
+                namerepo=request.args.get('namerepo', type=str)
+            )
+            if repo is False:
+                return jsonify(error=config.INVALID_ERROR)
+            else:
+                repo_modules = check_data.find_api_modules(
+                owner=request.args.get('owner', type=str),
+                namerepo=request.args.get('namerepo', type=str)
+                )
+            return jsonify(found_modules=repo_modules)
+        else:
+            found_modules = check_data.get_redis_module_data(
+                owner=request.args.get('owner', type=str),
+                namerepo=request.args.get('namerepo', type=str)
+            )
+            return jsonify(found_modules=found_modules)
+    else:
+        return Response(
+            config.AUTHORIZE_ERROR,
+            status=401,
+            mimetype='application/json'
+        )
+
+
+
+
+# def return_check_modules():
+#     auth_token = auth.check_auth_token(
+#         request.args.get('token', type=str)
+#     )
+#     if auth_token is None:
+#         check_url = modules_cache.check_cache_data(
+#             owner=request.args.get('owner', type=str),
+#             namerepo=request.args.get('namerepo', type=str),
+#             redis_base=token_generator.create_redis_base()
+#         )
+#         return jsonify(check_url)
+#     else:
+#         return jsonify(auth_token)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80, debug=True)

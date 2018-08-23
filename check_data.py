@@ -1,5 +1,6 @@
 import repo_scoring
 import token_generator
+import module_scoring
 
 
 def check_auth_token(token):
@@ -66,3 +67,42 @@ def insert_redis_data(owner, namerepo, languages, repo_score):
     redis_storage.expire(
             insert_repo_result, 2592000
         )
+
+
+def check_module_cache(owner, namerepo):
+    redis_base = token_generator.create_redis_base()
+    redis_repository = f'{owner}_{namerepo}_modules'
+    check_redis_repo = redis_base.get(redis_repository)
+    if check_redis_repo is None:
+        return False
+    else:
+        return True
+
+def get_redis_module_data(owner, namerepo):
+    redis_base = token_generator.create_redis_base()
+    redis_repository = f'{owner}_{namerepo}_modules'
+    check_redis_repo = redis_base.get(redis_repository)
+    check_redis_repo = check_redis_repo.decode('utf-8')
+    return check_redis_repo
+
+def find_api_modules(owner, namerepo):
+    repository=f'{owner}/{namerepo}'
+    redis_storage = token_generator.create_redis_base()
+    rawfile = module_scoring.get_repo_resource_json(
+        repository=repository,
+        repo_resource='/zipball/master',
+        repo_params=module_scoring.REPO_PARAMS)
+    repo_zip_dir =module_scoring.unpack_repo_files(rawfile)
+    files = module_scoring.iterate_repo_py_files(repo_zip_dir)
+    repo_modules = module_scoring.find_import_modules(files)
+    found_modules = module_scoring.check_if_repo_has_seeking_modules(repo_modules)
+    redis_repository = '{}{}'.format(repository.replace('/', '_'), '_modules')
+    insert_redis_result = redis_storage.set(
+        redis_repository, found_modules
+    )
+    redis_storage.expire(
+        insert_redis_result, 2592000
+    )
+    module_scoring.delete_download_files(rawfile, repo_zip_dir)
+    return found_modules
+

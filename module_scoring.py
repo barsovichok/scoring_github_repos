@@ -3,7 +3,6 @@ import config
 import os
 import glob
 import zipfile
-import imported_modules
 import shutil
 
 REPO_PARAMS = {
@@ -35,10 +34,27 @@ def iterate_repo_py_files(repo_zip_dir):
     files = glob.glob(repo_zip_dir + '/**/*.py', recursive=True)
     return files
 
-
-def find_modules(files):
-    repo_modules = imported_modules.find_import_modules(files)
-    return repo_modules
+def find_import_modules(files):
+    imported_modules = []
+    for file in files:
+        file = open(file, 'r')
+        for line in file:
+            if not line.strip():
+                continue
+            if line.startswith('from') or line.startswith('import'):
+                if line.startswith('import'):
+                    imported_modules += [l.strip() for l in line[7:].split(',')]
+                elif line.startswith('from'):
+                    from_module = line[5:].split(',')
+                    from_module = from_module[0]
+                    from_module = from_module.split(' ')
+                    from_module = from_module[0]
+                    from_module = from_module.lower()
+                    imported_modules.append(from_module)
+                else:
+                    file.close()
+                    break
+    return imported_modules
 
 
 def check_if_repo_has_seeking_modules(repo_modules):
@@ -46,10 +62,15 @@ def check_if_repo_has_seeking_modules(repo_modules):
     for module in repo_modules:
         if module in config.MODULES:
             found_modules.append(module)
-
-    clear_modules = set(found_modules)
-    found_modules = list(clear_modules)
     return found_modules
+
+def delete_doubled_assignments(found_modules):
+    clear_modules = set(found_modules)
+    clear_found_modules = list(clear_modules)
+    return clear_found_modules
+
+def print_modules(clear_found_modules):
+    print(clear_found_modules)
 
 
 def delete_download_files(rawfile, repo_zip_dir):
@@ -82,7 +103,8 @@ if __name__ == '__main__':
             )
     repo_zip_dir = unpack_repo_files(rawfile)
     files = iterate_repo_files(repo_zip_dir)
-    repo_modules = imported_modules.find_import_modules(files)
-    found_modules = check_if_repo_has_seeking_modules(repo_modules)
+    imported_modules = find_import_modules(files)
+    found_modules = check_if_repo_has_seeking_modules(imported_modules)
+    clear_found_modules = delete_doubled_assignments(found_modules)
     print(f'Обнаруженные модули: {found_modules}')
     delete_download_files(rawfile, repo_zip_dir)
